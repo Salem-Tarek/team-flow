@@ -43,7 +43,7 @@ const initialData = [
     }
 ];
 
-function GenericTable() {
+function GenericTable({ columns = [], showCheckbox = true }) {
     const [data, setData] = useState(initialData)
     const checkAll = data.length > 0 && data.every((item) => item.checked)
     const isIntermediate = data.some((item) => item.checked) && data.some((item) => !item.checked)
@@ -85,37 +85,39 @@ function GenericTable() {
             <table className="table">
                 <thead>
                     <tr>
-                        <th>
+                        {showCheckbox && (<th>
                             <label>
                                 <input ref={checkAllCheckbox} checked={checkAll} onChange={(e) => handleCheckAll(e.target.checked)} type="checkbox" className="checkbox" />
                             </label>
-                        </th>
-                        <th>Name</th>
-                        <th>Job</th>
-                        <th>Favorite Color</th>
+                        </th>)}
+                        {columns.map(column => {
+                            return (
+                                <th>{column.label}</th>
+                            )
+                        })}
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((item) => (
                         <tr key={item.id}>
-                            <th>
+                            {showCheckbox && (<th>
                                 <label>
                                     <input checked={item.checked} onChange={() => handleCheck(item.id)} type="checkbox" className="checkbox" />
                                 </label>
-                            </th>
-                            <td>
-                                <div className="flex items-center gap-3">
-                                    <div>
-                                        <div className="font-bold">{item.name}</div>
-                                        <div className="text-sm opacity-50">{item.country}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {item.company}
-                            </td>
-                            <td>{item.favoriteColor}</td>
+                            </th>)}
+                            {columns.map(column => {
+                                return (
+                                    <td>
+                                        <div className="flex items-center gap-3">
+                                            <div>
+                                                <div className="font-bold">{item[column.key]}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                )
+                            })}
                             <th>
                                 <button className="btn btn-ghost btn-xs">details</button>
                             </th>
