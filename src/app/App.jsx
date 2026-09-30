@@ -1,11 +1,13 @@
 import '../App.css'
+import AppRoutes from './router/router'
+import { BrowserRouter } from 'react-router-dom'
 
 function App() {
 
   return (
-    <>
-      <h1 className="text-xl mb-8">Team Flow App</h1>
-    </>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }
 
