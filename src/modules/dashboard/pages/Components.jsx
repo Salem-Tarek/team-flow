@@ -1,5 +1,6 @@
 import GenericTable from '~/components/GenericTable/index.jsx'
 import GenericBtn from '~/components/GenericBtn/index.jsx'
+import GenericModal from '~/components/Modals/index.jsx'
 
 function Components() {
     function onEditClick(item) {
@@ -14,6 +15,12 @@ function Components() {
         alert(`View Click - ${item?.id}`)
     }
 
+    function handleSubmitModal(e) {
+        e.preventDefault();
+        alert("submit");
+        document.getElementById("testtModal").close();
+    }
+
     const columns = [
         { key: "name", label: "Name" },
         { key: "company", label: "Job" },
@@ -22,7 +29,19 @@ function Components() {
     ]
     return (
         <>
-            <GenericBtn text="Salemm" isDisabled={false} isLoading={true} />
+            <GenericBtn onClick={() => document.getElementById("testtModal").showModal()} text="Salemm" isDisabled={false} isLoading={false} />
+            <GenericModal
+                modalId="testtModal"
+                modalHeader="Test Modal"
+                footer={
+                    <>
+                        <GenericBtn text="Cancel" className="btn-sm brn-soft" />
+                        <GenericBtn onClick={(e) => handleSubmitModal(e)} className="btn-sm brn-soft btn-error" text="Submit" />
+                    </>
+                }>
+
+                {/* <h1>Hello Modal</h1> */}
+            </GenericModal>
             <GenericTable
                 columns={columns}
                 showCheckbox={true}
