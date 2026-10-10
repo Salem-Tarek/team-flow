@@ -41,7 +41,7 @@ export default function ThemeToggle({ className = '' }) {
       className={`
         btn
         btn-ghost
-        btn-circle
+        btn-sm
         text-base-content
         hover:bg-base-300
         transition-colors

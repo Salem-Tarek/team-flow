@@ -1,4 +1,5 @@
 import GenericTable from '~/components/GenericTable/index.jsx'
+import GenericListing from '~/components/GenericListing/index.jsx'
 import GenericBtn from '~/components/GenericBtn/index.jsx'
 import GenericModal from '~/components/Modals/index.jsx'
 
@@ -43,6 +44,21 @@ function Components() {
                 {/* <h1>Hello Modal</h1> */}
             </GenericModal>
             <GenericTable
+                columns={columns}
+                showCheckbox={true}
+                showActions={true}
+                onEditClick={(item) => onEditClick(item)}
+                onDeleteClick={(item) => onDeleteClick(item)}
+                onViewClick={(item) => onViewClick(item)}
+            />
+            <br />
+            <br />
+            <hr />
+            <br />
+            <br />
+            <GenericListing
+                title="Test Listing"
+                onAddClick={() => alert("Add Click")}
                 columns={columns}
                 showCheckbox={true}
                 showActions={true}
