@@ -5,7 +5,7 @@ import { teamsFields as fields } from "~/app/constants/fields.js";
 
 function TeamsList() {
     const { data: teamsData, isFetching: isLoading, refetch } = useTeams();
-    const { mutate: createTeam, isPending: isCreating, isError, error } = useCreateTeam();
+    const { mutate: createTeam, isPending: isCreating } = useCreateTeam();
 
 
     function onEditClick(item) {
@@ -20,10 +20,11 @@ function TeamsList() {
         alert(`View Click - ${item?.id}`)
     }
 
-    function onSubmitForm(data) {
+    function onSubmitForm(data, { reset }) {
         createTeam(data, {
             onSuccess: (res) => {
                 alert(res.message);
+                reset();
                 document.getElementById("addModal").close()
             }
         })
@@ -47,9 +48,9 @@ function TeamsList() {
                 onEditClick={(item) => onEditClick(item)}
                 onDeleteClick={(item) => onDeleteClick(item)}
                 onViewClick={(item) => onViewClick(item)}
-                onSubmitForm={(data) => onSubmitForm(data)}
+                onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
-                isLoading={isLoading}
+                isLoading={isLoading || isCreating}
             >
             </GenericListing>
         </div>

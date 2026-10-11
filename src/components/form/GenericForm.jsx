@@ -31,7 +31,7 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
     }, [defaultValues, reset]);
 
     return (
-        <form id={id} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <form id={id} onSubmit={handleSubmit(data => onSubmit(data, { reset }))} className="flex flex-col gap-3">
             {list.map(({ name, label, type = "text", items, rules, isRequired, ...rest }) => {
                 const Input = inputs[type] || FormField;
                 return (
@@ -40,6 +40,7 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
                         label={isRequired ? `${label} *` : label}
                         error={errors[name]}          // NEW
                         options={items}
+                        disabled={isPending}
                         {...(Input === FormField && { type })}
                         {...rest}
                         {...register(name)}

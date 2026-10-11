@@ -1,10 +1,11 @@
 import GenericListing from "~/components/GenericListing";
-import { useUsers } from "../hooks/index.js";
+import { useUsers, useCreateUser } from "../hooks/index.js";
 import { usersColumns } from "~/app/constants/columns.js";
 import { usersFields as fields } from "~/app/constants/fields.js";
 
 function UsersList() {
     const { data: usersData, isFetching: isLoading, refetch } = useUsers();
+    const { mutate: createUser, isPending: isCreating } = useCreateUser();
 
     function onEditClick(item) {
         alert(`Edit Click - ${item?.id}`)
@@ -18,10 +19,14 @@ function UsersList() {
         alert(`View Click - ${item?.id}`)
     }
 
-    function onSubmitForm(data) {
-        alert("data")
-        console.log("data")
-        console.log(data)
+    function onSubmitForm(data, { reset }) {
+        createUser(data, {
+            onSuccess: (res) => {
+                alert(res.message);
+                reset();
+                document.getElementById("addModal").close()
+            }
+        })
     }
 
     function addBtnClick() {
@@ -42,9 +47,9 @@ function UsersList() {
                 onEditClick={(item) => onEditClick(item)}
                 onDeleteClick={(item) => onDeleteClick(item)}
                 onViewClick={(item) => onViewClick(item)}
-                onSubmitForm={(data) => onSubmitForm(data)}
+                onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
-                isLoading={isLoading}
+                isLoading={isLoading || isCreating}
             >
             </GenericListing>
         </div>

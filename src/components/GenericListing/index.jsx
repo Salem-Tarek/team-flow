@@ -5,6 +5,10 @@ import GenericModal from "~/components/Modals/index.jsx";
 
 function GenericListing({ children, title, onAddClick, onRefresh, columns = [], initialData = [], showCheckbox = true, showActions = true, onEditClick, onDeleteClick, onViewClick, isLoading, showAddNew = true, fields = [], defaultValues = {}, onSubmitForm, addBtnText = 'Add New', modalHeaderText = "Add New" }) {
 
+    const handleFormSubmit = (data, { reset }) => {
+        onSubmitForm(data, { reset })
+    }
+
     return (
         <div className="bg-base-100 p-4 rounded-lg">
             <div className="flex justify-between flex-col gap-4 mb-4">
@@ -31,7 +35,7 @@ function GenericListing({ children, title, onAddClick, onRefresh, columns = [], 
                                     <GenericForm
                                         fields={fields}
                                         defaultValues={defaultValues}
-                                        onSubmit={(data) => onSubmitForm(data)}
+                                        onSubmit={(data, { reset }) => handleFormSubmit(data, { reset })}
                                         isPending={isLoading}
                                         showSubmitBtn={false}
                                     />
