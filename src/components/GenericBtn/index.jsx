@@ -1,6 +1,6 @@
-function GenericBtn({ text = "Default", isDisabled = false, isLoading = false, icon = null, className = "", children, onClick }) {
+function GenericBtn({ text = "Default", isDisabled = false, isLoading = false, icon = null, className = "", children, onClick, ...rest }) {
     return (
-        <button onClick={onClick} disabled={isDisabled || isLoading} className={`btn ${className}`}>
+        <button onClick={onClick} disabled={isDisabled || isLoading} className={`btn ${className}`} {...rest}>
             {children}
             {icon && <span>{icon}</span>}
             {isLoading && <span className="loading loading-spinner"></span>}

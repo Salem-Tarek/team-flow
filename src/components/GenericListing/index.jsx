@@ -1,8 +1,9 @@
 import GenericBtn from "~/components/GenericBtn/index.jsx";
 import GenericTable from "~/components/GenericTable/index.jsx";
+import GenericForm from "~/components/form/GenericForm.jsx";
 import GenericModal from "~/components/Modals/index.jsx";
 
-function GenericListing({ children, title, onAddClick, onRefresh, columns = [], showCheckbox = true, showActions = true, onEditClick, onDeleteClick, onViewClick, isLoading, showAddNew = true }) {
+function GenericListing({ children, title, onAddClick, onRefresh, columns = [], initialData = [], showCheckbox = true, showActions = true, onEditClick, onDeleteClick, onViewClick, isLoading, showAddNew = true, fields = [], defaultValues = {}, onSubmitForm, addBtnText = 'Add New', modalHeaderText = "Add New" }) {
 
     return (
         <div className="bg-base-100 p-4 rounded-lg">
@@ -14,19 +15,27 @@ function GenericListing({ children, title, onAddClick, onRefresh, columns = [], 
                     </GenericBtn>
                     {showAddNew && (
                         <>
-                            <GenericBtn isDisabled={isLoading} text="Add New" onClick={onAddClick} className="btn-sm brn-soft btn-primary">
+                            <GenericBtn isDisabled={isLoading} text={addBtnText} onClick={onAddClick} className="btn-sm brn-soft btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13.0001 10.9999L22.0002 10.9997L22.0002 12.9997L13.0001 12.9999L13.0001 21.9998L11.0001 21.9998L11.0001 12.9999L2.00004 13.0001L2 11.0001L11.0001 10.9999L11 2.00025L13 2.00024L13.0001 10.9999Z"></path></svg>
                             </GenericBtn>
                             <GenericModal
-                                modalId="addUserModal"
-                                modalHeader="Add New User"
+                                modalId="addModal"
+                                modalHeader={modalHeaderText}
                                 footer={
                                     <>
                                         <GenericBtn text="Cancel" className="btn-sm brn-soft" />
-                                        <GenericBtn onClick={(e) => { e.preventDefault(); handleSubmitModal(e) }} className="btn-sm brn-soft btn-primary" text="Submit" />
+                                        <GenericBtn form="listingForm" className="btn-sm brn-soft btn-primary" text="Submit" />
                                     </>
                                 }>
-                                {children}
+                                {children ? children : (
+                                    <GenericForm
+                                        fields={fields}
+                                        defaultValues={defaultValues}
+                                        onSubmit={(data) => onSubmitForm(data)}
+                                        isPending={isLoading}
+                                        showSubmitBtn={false}
+                                    />
+                                )}
                             </GenericModal>
                         </>
                     )}
@@ -34,6 +43,7 @@ function GenericListing({ children, title, onAddClick, onRefresh, columns = [], 
             </div>
             <GenericTable
                 columns={columns}
+                initialData={initialData}
                 showCheckbox={showCheckbox}
                 showActions={showActions}
                 onEditClick={onEditClick}

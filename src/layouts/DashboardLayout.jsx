@@ -4,8 +4,82 @@ import lightLogo from '@/assets/images/light-logo.png'
 import miniLightLogo from '@/assets/images/mini-light-logo.png'
 import darkLogo from '@/assets/images/dark-logo.png'
 import miniDarkLogo from '@/assets/images/mini-dark-logo.png'
+import { NavLink } from "react-router-dom";
 
 function DashboardLayout() {
+    const Icon = ({ children }) => (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4">
+            {children}
+        </svg>
+    );
+
+    const navItems = [
+        {
+            to: "/dashboard",
+            label: "Dashboard",
+            icon: (
+                <Icon>
+                    <rect width="7" height="9" x="3" y="3" rx="1" />
+                    <rect width="7" height="5" x="14" y="3" rx="1" />
+                    <rect width="7" height="9" x="14" y="12" rx="1" />
+                    <rect width="7" height="5" x="3" y="16" rx="1" />
+                </Icon>
+            ),
+        },
+        {
+            to: "/dashboard/users",
+            label: "Users",
+            icon: (
+                <Icon>
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </Icon>
+            ),
+        },
+        {
+            to: "/dashboard/teams",
+            label: "Teams",
+            icon: (
+                <Icon>
+                    <path d="M18 21a8 8 0 0 0-16 0" />
+                    <circle cx="10" cy="8" r="5" />
+                    <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+                </Icon>
+            ),
+        },
+        {
+            to: "/dashboard/projects",
+            label: "Projects",
+            icon: (
+                <Icon>
+                    <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                </Icon>
+            ),
+        },
+        {
+            to: "/dashboard/tasks",
+            label: "Tasks",
+            icon: (
+                <Icon>
+                    <path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5" />
+                    <path d="m9 11 3 3L22 4" />
+                </Icon>
+            ),
+        },
+        {
+            to: "/dashboard/profile",
+            label: "Profile",
+            icon: (
+                <Icon>
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </Icon>
+            ),
+        },
+    ];
+
     return (
         <div className="min-h-screen bg-base-200 text-base-content transition-colors duration-200">
             <div className="drawer lg:drawer-open">
@@ -74,24 +148,22 @@ function DashboardLayout() {
                             />
                         </div>
                         {/* Sidebar content here */}
-                        <ul className="menu w-full grow">
-                            {/* List item */}
-                            <li>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
-                                    {/* Home icon */}
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-                                    <span className="is-drawer-close:hidden">Homepage</span>
-                                </button>
-                            </li>
-
-                            {/* List item */}
-                            <li>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
-                                    {/* Settings icon */}
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
-                                    <span className="is-drawer-close:hidden">Settings</span>
-                                </button>
-                            </li>
+                        <ul className="menu w-full grow gap-1">
+                            {navItems.map(({ to, label, icon }) => (
+                                <li key={to}>
+                                    <NavLink
+                                        end
+                                        to={to}
+                                        data-tip={label}
+                                        className={({ isActive }) =>
+                                            `is-drawer-close:tooltip is-drawer-close:tooltip-right ${isActive ? "menu-active" : ""}`
+                                        }
+                                    >
+                                        {icon}
+                                        <span className="is-drawer-close:hidden">{label}</span>
+                                    </NavLink>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </aside>
