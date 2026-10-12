@@ -2,14 +2,39 @@ import GenericListing from "~/components/GenericListing";
 import { useTeams, useCreateTeam } from "../hooks/index.js";
 import { teamsColumns } from "~/app/constants/columns.js";
 import { teamsFields as fields } from "~/app/constants/fields.js";
+import { useState, useMemo } from "react";
+import { useUsers } from "~/modules/users/hooks/index.js";
 
 function TeamsList() {
     const { data: teamsData, isFetching: isLoading, refetch } = useTeams();
+    const { data: usersData } = useUsers();
     const { mutate: createTeam, isPending: isCreating } = useCreateTeam();
+    const [selectedTeam, setSelectedTeam] = useState({})
+    const [mode, setMode] = useState('edit')
+    const [formKey, setFormKey] = useState(0);
 
+    const teamsFieldsConfig = useMemo(() => {
+        const users = usersData?.map(user => ({
+            value: user.id,
+            label: user.name,
+        }))
+        return fields(users)
+    }, [usersData])
+
+    const modalHeaderText = mode === 'edit' ? 'Edit Team' : 'Add Team';
+
+    function addBtnClick() {
+        setMode('add')
+        setSelectedTeam({})
+        setFormKey((k) => k + 1);
+        document.getElementById("addModal").showModal()
+    }
 
     function onEditClick(item) {
-        alert(`Edit Click - ${item?.id}`)
+        setSelectedTeam(item)
+        setMode('edit')
+        setFormKey((k) => k + 1);
+        document.getElementById("addModal").showModal()
     }
 
     function onDeleteClick(item) {
@@ -30,19 +55,18 @@ function TeamsList() {
         })
     }
 
-    function addBtnClick() {
-        document.getElementById("addModal").showModal()
-    }
     return (
         <div>
             <GenericListing
+                formKey={formKey}
                 title="Teams List"
                 addBtnText="Add Team"
-                modalHeaderText="Add New Team"
+                modalHeaderText={modalHeaderText}
                 onAddClick={() => addBtnClick()}
                 columns={teamsColumns}
                 initialData={teamsData}
-                fields={fields}
+                defaultValues={selectedTeam}
+                fields={teamsFieldsConfig}
                 showCheckbox={true}
                 showActions={true}
                 onEditClick={(item) => onEditClick(item)}

@@ -3,7 +3,7 @@ import GenericTable from "~/components/GenericTable/index.jsx";
 import GenericForm from "~/components/form/GenericForm.jsx";
 import GenericModal from "~/components/Modals/index.jsx";
 
-function GenericListing({ children, title, onAddClick, onRefresh, columns = [], initialData = [], showCheckbox = true, showActions = true, onEditClick, onDeleteClick, onViewClick, isLoading, showAddNew = true, fields = [], defaultValues = {}, onSubmitForm, addBtnText = 'Add New', modalHeaderText = "Add New" }) {
+function GenericListing({ formKey, children, title, onAddClick, onRefresh, columns = [], initialData = [], showCheckbox = true, showActions = true, onEditClick, onDeleteClick, onViewClick, isLoading, showAddNew = true, fields = [], defaultValues = {}, onSubmitForm, addBtnText = 'Add New', modalHeaderText = "Add New" }) {
 
     const handleFormSubmit = (data, { reset }) => {
         onSubmitForm(data, { reset })
@@ -33,6 +33,7 @@ function GenericListing({ children, title, onAddClick, onRefresh, columns = [], 
                                 }>
                                 {children ? children : (
                                     <GenericForm
+                                        key={formKey}
                                         fields={fields}
                                         defaultValues={defaultValues}
                                         onSubmit={(data, { reset }) => handleFormSubmit(data, { reset })}

@@ -2,13 +2,39 @@ import GenericListing from "~/components/GenericListing";
 import { useUsers, useCreateUser } from "../hooks/index.js";
 import { usersColumns } from "~/app/constants/columns.js";
 import { usersFields as fields } from "~/app/constants/fields.js";
+import { useState, useMemo } from 'react'
+import { useTeams } from "~/modules/teams/hooks/index.js";
 
 function UsersList() {
     const { data: usersData, isFetching: isLoading, refetch } = useUsers();
+    const { data: teamsData } = useTeams();
     const { mutate: createUser, isPending: isCreating } = useCreateUser();
+    const [selectedUser, setSelectedUser] = useState({})
+    const [mode, setMode] = useState('edit')
+    const [formKey, setFormKey] = useState(0);
+
+    const usersFieldsConfig = useMemo(() => {
+        const teams = teamsData?.map(team => ({
+            value: team.id,
+            label: team.name,
+        }))
+        return fields(mode, teams)
+    }, [mode, teamsData])
+
+    const modalHeaderText = mode === 'edit' ? 'Edit User' : 'Add User';
+
+    function addBtnClick() {
+        setMode('add')
+        setSelectedUser({})
+        setFormKey((k) => k + 1);
+        document.getElementById("addModal").showModal()
+    }
 
     function onEditClick(item) {
-        alert(`Edit Click - ${item?.id}`)
+        setSelectedUser(item)
+        setMode('edit')
+        setFormKey((k) => k + 1);
+        document.getElementById("addModal").showModal()
     }
 
     function onDeleteClick(item) {
@@ -29,19 +55,18 @@ function UsersList() {
         })
     }
 
-    function addBtnClick() {
-        document.getElementById("addModal").showModal()
-    }
     return (
         <div>
             <GenericListing
+                formKey={formKey}
                 title="Users List"
                 addBtnText="Add User"
-                modalHeaderText="Add New User"
+                modalHeaderText={modalHeaderText}
                 onAddClick={() => addBtnClick()}
                 columns={usersColumns}
                 initialData={usersData}
-                fields={fields}
+                defaultValues={selectedUser}
+                fields={usersFieldsConfig}
                 showCheckbox={true}
                 showActions={true}
                 onEditClick={(item) => onEditClick(item)}
