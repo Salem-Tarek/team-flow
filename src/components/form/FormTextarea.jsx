@@ -1,7 +1,7 @@
-function FormTextarea({ label, error, rows = 3, ref, ...rest }) {
+function FormTextarea({ label, error, className, rows = 3, ref, ...rest }) {
     return (
-        <div>
-            <label className="label">{label}</label>
+        <div className={className}>
+            <label className="label mb-1">{label}</label>
             <textarea
                 ref={ref}
                 rows={rows}

@@ -31,8 +31,8 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
     }, [defaultValues, reset]);
 
     return (
-        <form id={id} onSubmit={handleSubmit(data => onSubmit(data, { reset }))} className="flex flex-col gap-3">
-            {list.map(({ name, label, type = "text", items, rules, isRequired, ...rest }) => {
+        <form id={id} onSubmit={handleSubmit(data => onSubmit(data, { reset }))} className="gap-2 grid grid-cols-1 tablet:grid-cols-2">
+            {list.map(({ name, label, type = "text", items, rules, isRequired, size = null, ...rest }) => {
                 const Input = inputs[type] || FormField;
                 return (
                     <Input
@@ -41,6 +41,7 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
                         error={errors[name]}          // NEW
                         options={items}
                         disabled={isPending}
+                        className={`${size ? `col-span-${size}` : 'col-span-full'}`}
                         {...(Input === FormField && { type })}
                         {...rest}
                         {...register(name)}
@@ -49,7 +50,7 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
             })}
 
             {showSubmitBtn && (
-                <button type="submit" className="btn btn-primary" disabled={isPending}>
+                <button type="submit" className="btn btn-primary col-span-full" disabled={isPending}>
                     {isPending && <span className="loading loading-spinner" />}
                     {submitLabel}
                 </button>

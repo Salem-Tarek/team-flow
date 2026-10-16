@@ -86,7 +86,7 @@ function DashboardLayout() {
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle inline" />
                 <div className="drawer-content">
                     {/* Navbar */}
-                    <nav className="navbar w-full bg-base-300 justify-between sticky top-0 z-[999]">
+                    <nav className="navbar w-full bg-base-300 justify-between sticky top-0 z-[9]">
                         <div className="flex items-center gap-2">
                             <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-sm btn-square btn-ghost drawer-button">
                                 {/* Sidebar toggle icon */}

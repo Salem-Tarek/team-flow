@@ -1,7 +1,7 @@
-function FormField({ label, error, type = "text", ref, ...rest }) {
+function FormField({ label, error, className, type = "text", ref, ...rest }) {
     return (
-        <div>
-            <label className="label">{label}</label>
+        <div className={className}>
+            <label className="label mb-1">{label}</label>
             <input
                 ref={ref}
                 type={type}

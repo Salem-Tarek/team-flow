@@ -1,7 +1,7 @@
 // (variant="toggle" for a switch)
-function FormCheckbox({ label, error, variant = "checkbox", ref, ...rest }) {
+function FormCheckbox({ label, error, className, variant = "checkbox", ref, ...rest }) {
     return (
-        <div>
+        <div className={className}>
             <label className="label cursor-pointer justify-start gap-3">
                 <input ref={ref} type="checkbox" className={variant} {...rest} />
                 {label}

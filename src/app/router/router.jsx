@@ -9,6 +9,9 @@ import NotFound from "~/components/NotFound";
 // Modules
 import UsersList from "~/modules/users/pages/List.jsx"
 import TeamsList from "~/modules/teams/pages/List.jsx"
+import ProjectsList from "~/modules/projects/pages/List.jsx"
+import ProjectsAddEdit from "~/modules/projects/pages/AddEdit.jsx"
+import TasksList from "~/modules/tasks/pages/List.jsx"
 
 export default function AppRoutes() {
     return (
@@ -22,6 +25,10 @@ export default function AppRoutes() {
                     <Route path="components" element={<Components />} />
                     <Route path="users" element={<UsersList />} />
                     <Route path="teams" element={<TeamsList />} />
+                    <Route path="projects" element={<ProjectsList />} />
+                    <Route path="projects/add" element={<ProjectsAddEdit />} />
+                    <Route path="projects/edit/:id" element={<ProjectsAddEdit />} />
+                    <Route path="tasks" element={<TasksList />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

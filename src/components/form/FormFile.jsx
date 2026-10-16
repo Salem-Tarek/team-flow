@@ -1,7 +1,7 @@
-function FormFile({ label, error, oldFiles = [], ref, ...rest }) {
+function FormFile({ label, error, className, oldFiles = [], ref, ...rest }) {
     return (
-        <div>
-            <label className="label">{label}</label>
+        <div className={className}>
+            <label className="label mb-1">{label}</label>
             <input
                 ref={ref}
                 type="file"
