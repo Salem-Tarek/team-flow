@@ -240,4 +240,16 @@ export const handlers = [
             message: "Project updated successfully",
         }, { status: 201 });
     }),
+
+    // 5. Delete Item
+    http.delete('https://www.teamflow.com/api/projects/:id', ({ params }) => {
+        const { id } = params;
+
+        return HttpResponse.json({
+            data: {
+                id: Number(id),
+            },
+            message: "Project deleted successfully",
+        }, { status: 200 });
+    }),
 ]

@@ -210,4 +210,16 @@ export const handlers = [
             message: "Task updated successfully",
         }, { status: 201 });
     }),
+
+    // 5. Delete Item
+    http.delete('https://www.teamflow.com/api/tasks/:id', ({ params }) => {
+        const { id } = params;
+
+        return HttpResponse.json({
+            data: {
+                id: Number(id),
+            },
+            message: "Task deleted successfully",
+        }, { status: 200 });
+    })
 ]

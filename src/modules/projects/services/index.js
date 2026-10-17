@@ -19,3 +19,8 @@ export const updateProject = ({ id, data }) => {
     return axiosClient.put(`/projects/${id}`, { data })
         .then((res) => res.data)
 }
+
+export const deleteProject = (id) => {
+    return axiosClient.delete(`/projects/${id}`)
+        .then((res) => res.data)
+}

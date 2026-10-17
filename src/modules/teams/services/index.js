@@ -9,3 +9,8 @@ export const createTeam = (payload) => {
     return axiosClient.post("/teams", { data: payload })
         .then((res) => res.data)
 }
+
+export const deleteTeam = (id) => {
+    return axiosClient.delete(`/teams/${id}`)
+        .then((res) => res.data)
+}

@@ -1,19 +1,36 @@
 import GenericListing from "~/components/GenericListing";
-import { useProjects } from "../hooks/index.js";
+import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.js";
 import { useNavigate } from "react-router";
+import { useConfirmStore } from "~/stores/confirmStore.js";
 
 function ProjectsList() {
     const { data: projectsData, isFetching: isLoading, refetch } = useProjects();
+    const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
     let navigate = useNavigate();
-
+    const { confirm } = useConfirmStore();
 
     function onEditClick(item) {
         navigate(`/dashboard/projects/edit/${item.id}`);
     }
 
-    function onDeleteClick(item) {
-        alert(`Delete Click - ${item?.id}`)
+    async function onDeleteClick(item) {
+        const ok = await confirm({
+            modalHeader: 'Delete Project',
+            confirmBtnText: 'Delete',
+            message:
+                <>
+                    Are you sure you want to delete Project <span className="text-error font-bold">{item.name}</span> ?
+                </>,
+        });
+
+        if (ok) {
+            deleteProject(item.id, {
+                onSuccess: (res) => {
+                    alert(res.message);
+                }
+            })
+        }
     }
 
     function onViewClick(item) {

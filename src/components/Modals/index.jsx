@@ -8,7 +8,7 @@ function GenericModal({ modalHeader = 'Modal Header', footer, children, modalId 
                 <div className="modal-box">
                     {/* Header */}
                     <form method="dialog" className="flex justify-between items-center gap-2">
-                        <h3 className="text-base font-semibold">{modalHeader}</h3>
+                        <h3 className="text-base font-bold">{modalHeader}</h3>
                         <button className="btn btn-sm btn-circle btn-ghost ">✕</button>
                     </form>
 

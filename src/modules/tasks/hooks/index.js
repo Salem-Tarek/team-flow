@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getTasks, getTask, createTask, updateTask } from "../services/index";
+import { getTasks, getTask, createTask, updateTask, deleteTask } from "../services/index";
 import { reactQueryConfig } from "~/config/react-query.config.js";
 
-// Get List
+// 1. Get List
 export function useTasks(params) {
     return useQuery({
         queryKey: ["tasks", params],
@@ -11,7 +11,7 @@ export function useTasks(params) {
     });
 }
 
-// Get Single Item 
+// 2. Get Single Item 
 export function useTask(id) {
     return useQuery({
         queryKey: ["tasks", id],
@@ -21,7 +21,7 @@ export function useTask(id) {
     });
 }
 
-// Create Item
+// 3. Create Item
 export function useCreateTask() {
     const queryClient = useQueryClient();
     return useMutation({
@@ -30,11 +30,20 @@ export function useCreateTask() {
     });
 }
 
-// Update Item
+// 4. Update Item
 export function useUpdateTask() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: updateTask,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+    });
+}
+
+// 5. Delete Item
+export function useDeleteTask() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteTask,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
     });
 }

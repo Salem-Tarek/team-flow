@@ -1,10 +1,11 @@
 import GenericListing from "~/components/GenericListing";
-import { useTasks, useCreateTask } from "../hooks/index.js";
+import { useTasks, useCreateTask, useDeleteTask } from "../hooks/index.js";
 import { tasksColumns } from "~/app/constants/columns.js";
 import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
 import { useMemo, useState } from "react";
 import { taskFields as fields } from "~/app/constants/fields.js";
+import { useConfirmStore } from "~/stores/confirmStore.js";
 
 function TasksList() {
     const { data: tasksData, isFetching: isLoading, refetch } = useTasks();
@@ -14,6 +15,8 @@ function TasksList() {
     const [selectedTask, setSelectedTask] = useState({})
     const [mode, setMode] = useState('edit')
     const [formKey, setFormKey] = useState(0);
+    const { confirm } = useConfirmStore();
+    const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
 
     const tasksFieldsConfig = useMemo(() => {
         const users = usersData?.map(user => ({
@@ -43,8 +46,23 @@ function TasksList() {
         document.getElementById("addModal").showModal()
     }
 
-    function onDeleteClick(item) {
-        alert(`Delete Click - ${item?.id}`)
+    async function onDeleteClick(item) {
+        const ok = await confirm({
+            modalHeader: 'Delete Task',
+            confirmBtnText: 'Delete',
+            message:
+                <>
+                    Are you sure you want to delete Task <span className="text-error font-bold">{item.title}</span> ?
+                </>,
+        });
+
+        if (ok) {
+            deleteTask(item.id, {
+                onSuccess: (res) => {
+                    alert(res.message);
+                }
+            })
+        }
     }
 
     function onViewClick(item) {

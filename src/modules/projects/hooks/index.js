@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProjects, getProject, createProject, updateProject } from "../services/index";
+import { getProjects, getProject, createProject, updateProject, deleteProject } from "../services/index";
 import { reactQueryConfig } from "~/config/react-query.config.js";
 
 // Get List
@@ -35,6 +35,15 @@ export function useUpdateProject() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: updateProject,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+    });
+}
+
+// Delete Item
+export function useDeleteProject() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteProject,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
     });
 }

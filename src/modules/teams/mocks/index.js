@@ -154,4 +154,16 @@ export const handlers = [
             message: "Team created successfully",
         }, { status: 201 });
     }),
+
+    // 3. Delete Item
+    http.delete('https://www.teamflow.com/api/teams/:id', ({ params }) => {
+        const { id } = params;
+
+        return HttpResponse.json({
+            data: {
+                id: Number(id),
+            },
+            message: "Team deleted successfully",
+        }, { status: 200 });
+    })
 ]

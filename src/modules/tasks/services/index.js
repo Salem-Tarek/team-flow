@@ -19,3 +19,8 @@ export const updateTask = ({ id, data }) => {
     return axiosClient.put(`/tasks/${id}`, { data })
         .then((res) => res.data)
 }
+
+export const deleteTask = (id) => {
+    return axiosClient.delete(`/tasks/${id}`)
+        .then((res) => res.data)
+}
