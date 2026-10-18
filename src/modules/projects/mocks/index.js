@@ -192,9 +192,10 @@ export const handlers = [
     // 2. Get single item
     http.get('https://www.teamflow.com/api/projects/:id', ({ params }) => {
         const { id } = params;
-
-        const project = projects.find((p) => p.id === Number(id));
-
+        // alert(`id => ${id}`)
+        const project = projects.find((p) => p.id == Number(id));
+        console.log("project")
+        console.log(project)
         if (!project) {
             return new HttpResponse(JSON.stringify({ message: "Project not found" }), {
                 status: 404,

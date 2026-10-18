@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getTeams, createTeam, deleteTeam } from "../services/index";
+import { getTeams, createTeam, updateTeam, deleteTeam } from "../services/index";
 import { reactQueryConfig } from "~/config/react-query.config.js";
 
 // Get List
@@ -16,6 +16,15 @@ export function useCreateTeam() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createTeam,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }),
+    });
+}
+
+// Update Item
+export function useUpdateTeam() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: updateTeam,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }),
     });
 }

@@ -1,5 +1,5 @@
 import GenericListing from "~/components/GenericListing";
-import { useUsers, useCreateUser, useDeleteUser } from "../hooks/index.js";
+import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from "../hooks/index.js";
 import { usersColumns } from "~/app/constants/columns.js";
 import { usersFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo } from 'react'
@@ -10,6 +10,7 @@ function UsersList() {
     const { data: usersData, isFetching: isLoading, refetch } = useUsers();
     const { data: teamsData } = useTeams();
     const { mutate: createUser, isPending: isCreating } = useCreateUser();
+    const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
     const [selectedUser, setSelectedUser] = useState({})
     const [mode, setMode] = useState('edit')
     const [formKey, setFormKey] = useState(0);
@@ -59,18 +60,19 @@ function UsersList() {
         }
     }
 
-    function onViewClick(item) {
-        alert(`View Click - ${item?.id}`)
-    }
-
     function onSubmitForm(data, { reset }) {
-        createUser(data, {
+        const options = {
             onSuccess: (res) => {
                 alert(res.message);
                 reset();
                 document.getElementById("addModal").close()
             }
-        })
+        }
+        if (mode === 'add') {
+            createUser(data, options)
+        } else if (mode === 'edit') {
+            updateUser({ id: selectedUser?.id, data }, options)
+        }
     }
 
     return (
@@ -89,10 +91,9 @@ function UsersList() {
                 showActions={true}
                 onEditClick={(item) => onEditClick(item)}
                 onDeleteClick={(item) => onDeleteClick(item)}
-                onViewClick={(item) => onViewClick(item)}
                 onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
-                isLoading={isLoading || isCreating}
+                isLoading={isLoading || isCreating || isUpdating || isDeleting}
             >
             </GenericListing>
         </div>

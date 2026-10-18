@@ -10,6 +10,11 @@ export const createUser = (payload) => {
         .then((res) => res.data)
 }
 
+export const updateUser = ({ id, data }) => {
+    return axiosClient.put(`/users/${id}`, { data })
+        .then((res) => res.data)
+}
+
 export const deleteUser = (id) => {
     return axiosClient.delete(`/users/${id}`)
         .then((res) => res.data)

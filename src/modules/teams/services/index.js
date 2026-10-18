@@ -10,6 +10,11 @@ export const createTeam = (payload) => {
         .then((res) => res.data)
 }
 
+export const updateTeam = ({ id, data }) => {
+    return axiosClient.put(`/teams/${id}`, { data })
+        .then((res) => res.data)
+}
+
 export const deleteTeam = (id) => {
     return axiosClient.delete(`/teams/${id}`)
         .then((res) => res.data)

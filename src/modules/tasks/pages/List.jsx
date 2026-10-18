@@ -1,5 +1,5 @@
 import GenericListing from "~/components/GenericListing";
-import { useTasks, useCreateTask, useDeleteTask } from "../hooks/index.js";
+import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "../hooks/index.js";
 import { tasksColumns } from "~/app/constants/columns.js";
 import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
@@ -12,6 +12,7 @@ function TasksList() {
     const { data: usersData } = useUsers();
     const { data: projectsData } = useProjects();
     const { mutate: createTask, isPending: isCreating } = useCreateTask();
+    const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
     const [selectedTask, setSelectedTask] = useState({})
     const [mode, setMode] = useState('edit')
     const [formKey, setFormKey] = useState(0);
@@ -65,18 +66,20 @@ function TasksList() {
         }
     }
 
-    function onViewClick(item) {
-        alert(`View Click - ${item?.id}`)
-    }
-
     function onSubmitForm(data, { reset }) {
-        createTask(data, {
+        const options = {
             onSuccess: (res) => {
                 alert(res.message);
                 reset();
                 document.getElementById("addModal").close()
             }
-        })
+        }
+
+        if (mode === 'add') {
+            createTask(data, options)
+        } else if (mode === 'edit') {
+            updateTask({ id: selectedTask?.id, data }, options)
+        }
     }
 
     return (
@@ -95,10 +98,9 @@ function TasksList() {
                 showActions={true}
                 onEditClick={(item) => onEditClick(item)}
                 onDeleteClick={(item) => onDeleteClick(item)}
-                onViewClick={(item) => onViewClick(item)}
                 onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
-                isLoading={isLoading || isCreating}
+                isLoading={isLoading || isCreating || isUpdating || isDeleting}
             >
             </GenericListing>
         </div>

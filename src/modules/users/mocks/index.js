@@ -145,7 +145,25 @@ export const handlers = [
         }, { status: 201 });
     }),
 
-    // 3. Delete Item
+    // 3. Update Item
+    http.put('https://www.teamflow.com/api/users/:id', async ({ request, params }) => {
+        const { id } = params;
+        const data = await request.json();
+        const newItem = {
+            data: {
+                id: Number(id),
+                ...(data.data || {}),
+                updatedAt: new Date().toISOString(),
+            },
+        };
+
+        return HttpResponse.json({
+            ...newItem,
+            message: "User updated successfully",
+        }, { status: 201 });
+    }),
+
+    // 4. Delete Item
     http.delete('https://www.teamflow.com/api/users/:id', ({ params }) => {
         const { id } = params;
 

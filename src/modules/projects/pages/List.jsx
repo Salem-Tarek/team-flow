@@ -34,7 +34,7 @@ function ProjectsList() {
     }
 
     function onViewClick(item) {
-        alert(`View Click - ${item?.id}`)
+        navigate(`/dashboard/projects/${item.id}`);
     }
 
     function onSubmitForm(data, { reset }) {
@@ -61,7 +61,7 @@ function ProjectsList() {
                 onViewClick={(item) => onViewClick(item)}
                 onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
-                isLoading={isLoading}
+                isLoading={isLoading || isDeleting}
                 addBtnLink="/dashboard/projects/add"
             >
             </GenericListing>

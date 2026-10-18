@@ -37,22 +37,18 @@ function ProjectsAddEdit() {
     }, [params, projectData]);
 
     const handleFormSubmit = (data, { reset }) => {
+        const options = {
+            onSuccess: (res) => {
+                alert(res.message);
+                reset();
+                navigate('/dashboard/projects')
+            }
+        }
+
         if (mode === 'edit') {
-            updateProject({ id: params.id, data }, {
-                onSuccess: (res) => {
-                    alert(res.message);
-                    reset();
-                    navigate('/dashboard/projects')
-                }
-            })
+            updateProject({ id: params.id, data }, options);
         } else if (mode === 'add') {
-            createProject(data, {
-                onSuccess: (res) => {
-                    alert(res.message);
-                    reset();
-                    navigate('/dashboard/projects')
-                }
-            })
+            createProject(data, options);
         }
     }
 

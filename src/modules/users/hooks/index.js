@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getUsers, createUser, deleteUser } from "../services/index";
+import { getUsers, createUser, updateUser, deleteUser } from "../services/index";
 import { reactQueryConfig } from "~/config/react-query.config.js";
 
 // Get List
@@ -16,6 +16,15 @@ export function useCreateUser() {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createUser,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+    });
+}
+
+// Update Item
+export function useUpdateUser() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: updateUser,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
     });
 }
