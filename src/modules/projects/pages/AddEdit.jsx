@@ -37,6 +37,8 @@ function ProjectsAddEdit() {
     }, [params, projectData]);
 
     const handleFormSubmit = (data, { reset }) => {
+        const teamName = teamsData.find(team => team.id == data.teamId)?.name;
+        const ownerName = usersData.find(user => user.id == data.ownerId)?.name;
         const options = {
             onSuccess: (res) => {
                 alert(res.message);
@@ -44,11 +46,11 @@ function ProjectsAddEdit() {
                 navigate('/dashboard/projects')
             }
         }
-
+        const submitData = { ...data, teamName, ownerName, progress: Math.floor(Math.random() * 100), taskCount: Math.floor(Math.random() * 10) };
         if (mode === 'edit') {
-            updateProject({ id: params.id, data }, options);
+            updateProject({ id: params.id, data: submitData }, options);
         } else if (mode === 'add') {
-            createProject(data, options);
+            createProject(submitData, options);
         }
     }
 

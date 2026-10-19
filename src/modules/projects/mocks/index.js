@@ -183,6 +183,14 @@ const projects = [
     },
 ]
 
+function generateId(items) {
+    let id;
+    do {
+        id = Math.floor(Math.random() * 1000) + 1;
+    } while (items.some((item) => item.id === id));
+    return id;
+}
+
 export const handlers = [
     // 1. Get List
     http.get('https://www.teamflow.com/api/projects', () => {
@@ -192,10 +200,8 @@ export const handlers = [
     // 2. Get single item
     http.get('https://www.teamflow.com/api/projects/:id', ({ params }) => {
         const { id } = params;
-        // alert(`id => ${id}`)
         const project = projects.find((p) => p.id == Number(id));
-        console.log("project")
-        console.log(project)
+
         if (!project) {
             return new HttpResponse(JSON.stringify({ message: "Project not found" }), {
                 status: 404,
@@ -208,15 +214,17 @@ export const handlers = [
 
     // 3. Create Item
     http.post('https://www.teamflow.com/api/projects', async ({ request }) => {
+        const generatedId = generateId(projects);
 
         const newItemData = await request.json();
         const newItem = {
             data: {
-                id: Math.random(),
+                id: generatedId,
                 ...(newItemData?.data || {}),
                 createdAt: new Date().toISOString(),
             },
         };
+        projects.unshift(newItem.data);
 
         return HttpResponse.json({
             ...newItem,
@@ -228,6 +236,8 @@ export const handlers = [
     http.put('https://www.teamflow.com/api/projects/:id', async ({ request, params }) => {
         const { id } = params;
         const data = await request.json();
+        const itemIndex = projects.findIndex(project => project.id === Number(id));
+
         const newItem = {
             data: {
                 id: Number(id),
@@ -235,7 +245,7 @@ export const handlers = [
                 updatedAt: new Date().toISOString(),
             },
         };
-
+        projects.splice(itemIndex, 1, newItem.data);
         return HttpResponse.json({
             ...newItem,
             message: "Project updated successfully",

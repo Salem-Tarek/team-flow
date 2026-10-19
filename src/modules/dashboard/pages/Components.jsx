@@ -2,6 +2,7 @@ import GenericTable from '~/components/GenericTable/index.jsx'
 import GenericListing from '~/components/GenericListing/index.jsx'
 import GenericBtn from '~/components/GenericBtn/index.jsx'
 import GenericModal from '~/components/Modals/index.jsx'
+import FormField from '~/components/form/FormField.jsx'
 
 function Components() {
     function onEditClick(item) {
@@ -30,6 +31,13 @@ function Components() {
     ]
     return (
         <>
+            <FormField
+                label="Due Date"
+                type="date"
+                name="dueDate"
+                min="2026-10-19"
+                max="2026-12-31"
+            />
             <GenericBtn onClick={() => document.getElementById("testtModal").showModal()} text="Salemm" isDisabled={false} isLoading={false} />
             <GenericModal
                 modalId="testtModal"

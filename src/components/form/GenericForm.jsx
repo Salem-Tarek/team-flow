@@ -21,7 +21,7 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
         Object.fromEntries(list.map((f) => [f.name, f.rules ?? z.any()]))
     );
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
         resolver: zodResolver(schema),   // NEW
         defaultValues,
     });
@@ -32,17 +32,45 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
 
     return (
         <form id={id} onSubmit={handleSubmit(data => onSubmit(data, { reset }))} className="gap-2 grid grid-cols-1 tablet:grid-cols-2">
-            {list.map(({ name, label, type = "text", items, rules, isRequired, size = null, ...rest }) => {
+            {list.map(({
+                name,
+                label,
+                type = "text",
+                items,
+                rules,
+                isRequired,
+                size = null,
+                minDateFrom,
+                maxDateFrom,
+                min,
+                max,
+                ...rest
+            }) => {
                 const Input = inputs[type] || FormField;
+
+                const minDate = minDateFrom
+                    ? watch(minDateFrom) || undefined
+                    : min;
+
+                const maxDate = maxDateFrom
+                    ? watch(maxDateFrom) || undefined
+                    : max;
+
                 return (
                     <Input
                         key={name}
                         label={isRequired ? `${label} *` : label}
-                        error={errors[name]}          // NEW
+                        error={errors[name]}
                         options={items}
                         disabled={isPending}
-                        className={`${size ? `col-span-${size}` : 'col-span-full'}`}
-                        {...(Input === FormField && { type })}
+                        className={`${size ? `col-span-${size}` : "col-span-full"}`}
+                        {...(Input === FormField && {
+                            type,
+                            ...(type === "date" && {
+                                min: minDate,
+                                max: maxDate,
+                            }),
+                        })}
                         {...rest}
                         {...register(name)}
                     />
