@@ -183,6 +183,36 @@ const projects = [
     },
 ]
 
+const STORAGE_KEY = 'projects'
+
+function getStoredProjects() {
+    try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            const raw = window.localStorage.getItem(STORAGE_KEY)
+            if (raw) {
+                const parsed = JSON.parse(raw)
+                if (Array.isArray(parsed)) {
+                    return parsed
+                }
+            }
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(projects))
+        }
+    } catch (e) {
+        console.error('Failed to read projects from localStorage:', e)
+    }
+    return [...projects]
+}
+
+function saveProjects(items) {
+    try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+        }
+    } catch (e) {
+        console.error('Failed to save projects to localStorage:', e)
+    }
+}
+
 function generateId(items) {
     let id;
     do {
@@ -194,13 +224,15 @@ function generateId(items) {
 export const handlers = [
     // 1. Get List
     http.get('https://www.teamflow.com/api/projects', () => {
-        return HttpResponse.json(projects)
+        const stored = getStoredProjects();
+        return HttpResponse.json(stored)
     }),
 
     // 2. Get single item
     http.get('https://www.teamflow.com/api/projects/:id', ({ params }) => {
         const { id } = params;
-        const project = projects.find((p) => p.id == Number(id));
+        const stored = getStoredProjects();
+        const project = stored.find((p) => p.id === Number(id));
 
         if (!project) {
             return new HttpResponse(JSON.stringify({ message: "Project not found" }), {
@@ -214,20 +246,22 @@ export const handlers = [
 
     // 3. Create Item
     http.post('https://www.teamflow.com/api/projects', async ({ request }) => {
-        const generatedId = generateId(projects);
+        const stored = getStoredProjects();
+        const generatedId = generateId(stored);
 
         const newItemData = await request.json();
+        const projectPayload = newItemData?.data || newItemData || {};
         const newItem = {
-            data: {
-                id: generatedId,
-                ...(newItemData?.data || {}),
-                createdAt: new Date().toISOString(),
-            },
+            id: generatedId,
+            ...projectPayload,
+            createdAt: new Date().toISOString(),
         };
-        projects.unshift(newItem.data);
+
+        const updatedProjects = [newItem, ...stored];
+        saveProjects(updatedProjects);
 
         return HttpResponse.json({
-            ...newItem,
+            data: newItem,
             message: "Project created successfully",
         }, { status: 201 });
     }),
@@ -236,25 +270,40 @@ export const handlers = [
     http.put('https://www.teamflow.com/api/projects/:id', async ({ request, params }) => {
         const { id } = params;
         const data = await request.json();
-        const itemIndex = projects.findIndex(project => project.id === Number(id));
+        const stored = getStoredProjects();
+        const itemIndex = stored.findIndex(project => project.id === Number(id));
 
-        const newItem = {
-            data: {
-                id: Number(id),
-                ...(data.data || {}),
-                updatedAt: new Date().toISOString(),
-            },
+        if (itemIndex === -1) {
+            return new HttpResponse(JSON.stringify({ message: "Project not found" }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
+        const projectPayload = data?.data || data || {};
+        const updatedItem = {
+            ...stored[itemIndex],
+            ...projectPayload,
+            id: Number(id),
+            updatedAt: new Date().toISOString(),
         };
-        projects.splice(itemIndex, 1, newItem.data);
+
+        const updatedProjects = [...stored];
+        updatedProjects[itemIndex] = updatedItem;
+        saveProjects(updatedProjects);
+
         return HttpResponse.json({
-            ...newItem,
+            data: updatedItem,
             message: "Project updated successfully",
-        }, { status: 201 });
+        }, { status: 200 });
     }),
 
     // 5. Delete Item
     http.delete('https://www.teamflow.com/api/projects/:id', ({ params }) => {
         const { id } = params;
+        const stored = getStoredProjects();
+        const updatedProjects = stored.filter(project => project.id !== Number(id));
+        saveProjects(updatedProjects);
 
         return HttpResponse.json({
             data: {

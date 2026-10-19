@@ -5,7 +5,7 @@ import { reactQueryConfig } from "~/config/react-query.config.js";
 // Get List
 export function useProjects(params) {
     return useQuery({
-        queryKey: ["projects", params],
+        queryKey: ["projects", "list", params],
         queryFn: () => getProjects(params),
         ...reactQueryConfig
     });
@@ -14,7 +14,7 @@ export function useProjects(params) {
 // Get Single Item 
 export function useProject(id) {
     return useQuery({
-        queryKey: ["projects", id],
+        queryKey: ["projects", "detail", id],
         queryFn: () => getProject(id),
         ...reactQueryConfig,
         enabled: !!id

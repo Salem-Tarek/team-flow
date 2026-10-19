@@ -14,8 +14,9 @@ function ProjectsAddEdit() {
     const { data: projectData, isFetching: isLoading } = useProject(params.id);
     const { mutate: createProject, isPending: isCreating } = useCreateProject();
     const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
-    const { data: teamsData } = useTeams();
-    const { data: usersData } = useUsers();
+    const { data: teamsData = [] } = useTeams();
+    const { data: usersData = [] } = useUsers();
+
     const projectsFieldsConfig = useMemo(() => {
         const users = usersData?.map(user => ({
             value: user.id,
@@ -26,19 +27,22 @@ function ProjectsAddEdit() {
             value: team.id,
             label: team.name,
         }))
-        return fields(teams, users)
+        return fields(teams, users, mode === 'edit')
     }, [usersData, teamsData])
 
     useEffect(() => {
         setMode(params.id ? 'edit' : 'add');
-        if (projectData) {
-            setCurrentProject(projectData)
+
+        if (mode === 'edit' && projectData) {
+            setCurrentProject(projectData);
+        } else if (mode === 'add') {
+            setCurrentProject({});
         }
-    }, [params, projectData]);
+    }, [mode, projectData]);
 
     const handleFormSubmit = (data, { reset }) => {
-        const teamName = teamsData.find(team => team.id == data.teamId)?.name;
-        const ownerName = usersData.find(user => user.id == data.ownerId)?.name;
+        const teamName = teamsData?.find(team => team.id == data.teamId)?.name;
+        const ownerName = usersData?.find(user => user.id == data.ownerId)?.name;
         const options = {
             onSuccess: (res) => {
                 alert(res.message);
@@ -59,6 +63,7 @@ function ProjectsAddEdit() {
             <div className="bg-base-100 rounded-md p-4">
                 <h1 className="mb-4 text-xl font-semibold">{mode === 'add' ? 'Add Project' : `Edit Project`}<span className="text-primary font-bold"> {currentProject.name}</span></h1>
                 <GenericForm
+                    key={params.id || 'add'}
                     fields={projectsFieldsConfig}
                     defaultValues={currentProject}
                     onSubmit={(data, { reset }) => handleFormSubmit(data, { reset })}

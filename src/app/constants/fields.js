@@ -148,7 +148,7 @@ export const teamsFields = (users = []) => {
     ]
 }
 
-export const projectsFields = (teams = [], users = []) => [
+export const projectsFields = (teams = [], users = [], isEditMode = false) => [
     {
         name: "name",
         label: "Project Name",
@@ -212,7 +212,7 @@ export const projectsFields = (teams = [], users = []) => [
         label: "Start Date",
         type: "date",
         isRequired: true,
-        min: getToday(),
+        ...(isEditMode ? {} : { min: getToday() }),
         maxDateFrom: "dueDate",
         rules: z.string().min(1, "Start date is required"),
     },
@@ -221,6 +221,7 @@ export const projectsFields = (teams = [], users = []) => [
         label: "Due Date",
         type: "date",
         isRequired: true,
+        ...(isEditMode ? {} : { min: getToday() }),
         minDateFrom: "startDate",
         rules: z.string().min(1, "Due date is required"),
     },
@@ -246,21 +247,34 @@ export const projectsFields = (teams = [], users = []) => [
 
 export const taskFields = (projects = [], users = []) => [
     {
-        name: "title", label: "Task Title", isRequired: true, placeholder: "e.g. Build login page",
+        name: "title",
+        label: "Task Title",
+        isRequired: true,
+        placeholder: "e.g. Build login page",
         rules: z.string().min(3, "Title must be at least 3 characters"),
     },
     {
-        name: "projectId", label: "Project", type: "select", isRequired: true, placeholder: "Select project",
+        name: "projectId",
+        label: "Project",
+        type: "select",
+        isRequired: true,
+        placeholder: "Select project",
         items: projects,
         rules: z.any().refine((v) => v !== "" && v != null, "Project is required"),
     },
     {
-        name: "assigneeId", label: "Assignee", type: "select", placeholder: "Unassigned",
+        name: "assigneeId",
+        label: "Assignee",
+        type: "select",
+        placeholder: "Unassigned",
         items: users,
         rules: z.any().optional(),
     },
     {
-        name: "type", label: "Type", type: "select", isRequired: true,
+        name: "type",
+        label: "Type",
+        type: "select",
+        isRequired: true,
         items: [
             { value: "feature", label: "Feature" },
             { value: "task", label: "Task" },
@@ -271,7 +285,10 @@ export const taskFields = (projects = [], users = []) => [
         rules: z.string().min(1, "Type is required"),
     },
     {
-        name: "priority", label: "Priority", type: "select", isRequired: true,
+        name: "priority",
+        label: "Priority",
+        type: "select",
+        isRequired: true,
         items: [
             { value: "low", label: "Low" },
             { value: "medium", label: "Medium" },
@@ -281,7 +298,10 @@ export const taskFields = (projects = [], users = []) => [
         rules: z.string().min(1, "Priority is required"),
     },
     {
-        name: "status", label: "Status", type: "select", isRequired: true,
+        name: "status",
+        label: "Status",
+        type: "select",
+        isRequired: true,
         items: [
             { value: "todo", label: "To Do" },
             { value: "in_progress", label: "In Progress" },
@@ -291,15 +311,23 @@ export const taskFields = (projects = [], users = []) => [
         rules: z.string().min(1, "Status is required"),
     },
     {
-        name: "dueDate", label: "Due Date", type: "date",
+        name: "dueDate",
+        label: "Due Date",
+        type: "date",
+        min: today(),
         rules: z.string().optional(),
     },
     {
-        name: "estimateHours", label: "Estimate (hours)", placeholder: "0",
+        name: "estimateHours",
+        label: "Estimate (hours)",
+        placeholder: "0",
         rules: z.string().refine((v) => v === "" || (!isNaN(Number(v)) && Number(v) >= 0), "Estimate must be a positive number"),
     },
     {
-        name: "description", label: "Description", type: "textarea", rows: 4,
+        name: "description",
+        label: "Description",
+        type: "textarea",
+        rows: 4,
         rules: z.string().max(500, "Max 500 characters").optional(),
     },
 ];

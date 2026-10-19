@@ -31,13 +31,6 @@ function Components() {
     ]
     return (
         <>
-            <FormField
-                label="Due Date"
-                type="date"
-                name="dueDate"
-                min="2026-10-19"
-                max="2026-12-31"
-            />
             <GenericBtn onClick={() => document.getElementById("testtModal").showModal()} text="Salemm" isDisabled={false} isLoading={false} />
             <GenericModal
                 modalId="testtModal"
