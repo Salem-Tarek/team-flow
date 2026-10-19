@@ -314,7 +314,7 @@ export const taskFields = (projects = [], users = []) => [
         name: "dueDate",
         label: "Due Date",
         type: "date",
-        min: today(),
+        min: getToday(),
         rules: z.string().optional(),
     },
     {
