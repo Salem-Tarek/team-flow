@@ -27,6 +27,7 @@ export function useCreateProject() {
     return useMutation({
         mutationFn: createProject,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+        onError: () => { }
     });
 }
 
@@ -36,6 +37,7 @@ export function useUpdateProject() {
     return useMutation({
         mutationFn: updateProject,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+        onError: () => { }
     });
 }
 
@@ -45,5 +47,6 @@ export function useDeleteProject() {
     return useMutation({
         mutationFn: deleteProject,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+        onError: () => { }
     });
 }

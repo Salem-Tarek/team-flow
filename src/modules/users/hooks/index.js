@@ -17,6 +17,8 @@ export function useCreateUser() {
     return useMutation({
         mutationFn: createUser,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+        onError: () => { },
+        onSettled: () => { }
     });
 }
 
@@ -26,6 +28,8 @@ export function useUpdateUser() {
     return useMutation({
         mutationFn: updateUser,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+        onError: () => { },
+        onSettled: () => { }
     });
 }
 
@@ -35,5 +39,6 @@ export function useDeleteUser() {
     return useMutation({
         mutationFn: deleteUser,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+        onError: () => { }
     });
 }

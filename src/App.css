@@ -282,3 +282,23 @@ body {
         color 0.25s ease,
         border-color 0.25s ease;
 }
+
+.toaster {
+    @apply tablet:max-w-[95%] w-[350px] bg-base-100 p-4 shadow-2xl rounded-lg border-s-[5px] select-none;
+
+    &.toaster-success {
+        @apply border-success;
+    }
+
+    &.toaster-error {
+        @apply border-error;
+    }
+
+    &.toaster-warning {
+        @apply border-warning;
+    }
+
+    &.toaster-info {
+        @apply border-info;
+    }
+}

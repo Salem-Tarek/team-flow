@@ -5,6 +5,7 @@ import { useUsers } from "~/modules/users/hooks/index.js";
 import { useTeams } from "~/modules/teams/hooks/index.js";
 import GenericForm from "~/components/form/GenericForm.jsx";
 import { useProject, useCreateProject, useUpdateProject } from "../hooks/index.js";
+import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function ProjectsAddEdit() {
     const params = useParams();
@@ -16,6 +17,7 @@ function ProjectsAddEdit() {
     const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
     const { data: teamsData = [] } = useTeams();
     const { data: usersData = [] } = useUsers();
+    const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const projectsFieldsConfig = useMemo(() => {
         const users = usersData?.map(user => ({
@@ -45,9 +47,12 @@ function ProjectsAddEdit() {
         const ownerName = usersData?.find(user => user.id == data.ownerId)?.name;
         const options = {
             onSuccess: (res) => {
-                alert(res.message);
+                addSuccessNotification(res.message);
                 reset();
                 navigate('/dashboard/projects')
+            },
+            onError: (error) => {
+                addErrorNotification(error.message)
             }
         }
         const submitData = { ...data, teamName, ownerName, progress: Math.floor(Math.random() * 100), taskCount: Math.floor(Math.random() * 10) };

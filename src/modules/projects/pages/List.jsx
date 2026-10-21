@@ -3,12 +3,14 @@ import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.js";
 import { useNavigate } from "react-router";
 import { useConfirmStore } from "~/stores/confirmStore.js";
+import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function ProjectsList() {
     const { data: projectsData, isFetching: isLoading, refetch } = useProjects();
     const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
     let navigate = useNavigate();
     const { confirm } = useConfirmStore();
+    const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     function onEditClick(item) {
         navigate(`/dashboard/projects/edit/${item.id}`);
@@ -27,7 +29,10 @@ function ProjectsList() {
         if (ok) {
             deleteProject(item.id, {
                 onSuccess: (res) => {
-                    alert(res.message);
+                    addSuccessNotification(res.message);
+                },
+                onError: (error) => {
+                    addErrorNotification(error.message)
                 }
             })
         }
@@ -40,9 +45,12 @@ function ProjectsList() {
     function onSubmitForm(data, { reset }) {
         createTeam(data, {
             onSuccess: (res) => {
-                alert(res.message);
+                addSuccessNotification(res.message);
                 reset();
                 document.getElementById("addModal").close()
+            },
+            onError: (error) => {
+                addErrorNotification(error.message)
             }
         })
     }

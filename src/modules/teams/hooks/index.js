@@ -17,6 +17,8 @@ export function useCreateTeam() {
     return useMutation({
         mutationFn: createTeam,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }),
+        onError: () => { },
+        onSettled: () => { }
     });
 }
 
@@ -26,6 +28,8 @@ export function useUpdateTeam() {
     return useMutation({
         mutationFn: updateTeam,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }),
+        onError: () => { },
+        onSettled: () => { }
     });
 }
 
@@ -35,5 +39,6 @@ export function useDeleteTeam() {
     return useMutation({
         mutationFn: deleteTeam,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }),
+        onError: () => { }
     });
 }

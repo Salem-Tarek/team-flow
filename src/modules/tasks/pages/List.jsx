@@ -6,6 +6,7 @@ import { useProjects } from "~/modules/projects/hooks";
 import { useMemo, useState } from "react";
 import { taskFields as fields } from "~/app/constants/fields.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
+import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function TasksList() {
     const { data: tasksData, isFetching: isLoading, refetch } = useTasks();
@@ -18,6 +19,7 @@ function TasksList() {
     const [formKey, setFormKey] = useState(0);
     const { confirm } = useConfirmStore();
     const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
+    const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const tasksFieldsConfig = useMemo(() => {
         const users = usersData?.map(user => ({
@@ -60,7 +62,10 @@ function TasksList() {
         if (ok) {
             deleteTask(item.id, {
                 onSuccess: (res) => {
-                    alert(res.message);
+                    addSuccessNotification(res.message);
+                },
+                onError: (error) => {
+                    addErrorNotification(error.message)
                 }
             })
         }
@@ -69,8 +74,13 @@ function TasksList() {
     function onSubmitForm(data, { reset }) {
         const options = {
             onSuccess: (res) => {
-                alert(res.message);
+                addSuccessNotification(res.message);
                 reset();
+            },
+            onError: (error) => {
+                addErrorNotification(error.message)
+            },
+            onSettled: () => {
                 document.getElementById("addModal").close()
             }
         }

@@ -5,6 +5,7 @@ import { usersFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo } from 'react'
 import { useTeams } from "~/modules/teams/hooks/index.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
+import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function UsersList() {
     const { data: usersData, isFetching: isLoading, refetch } = useUsers();
@@ -16,6 +17,7 @@ function UsersList() {
     const [formKey, setFormKey] = useState(0);
     const { confirm } = useConfirmStore();
     const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
+    const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const usersFieldsConfig = useMemo(() => {
         const teams = teamsData?.map(team => ({
@@ -54,7 +56,10 @@ function UsersList() {
         if (ok) {
             deleteUser(item.id, {
                 onSuccess: (res) => {
-                    alert(res.message)
+                    addSuccessNotification(res.message)
+                },
+                onError: (error) => {
+                    addErrorNotification(error.message)
                 }
             })
         }
@@ -63,8 +68,13 @@ function UsersList() {
     function onSubmitForm(data, { reset }) {
         const options = {
             onSuccess: (res) => {
-                alert(res.message);
+                addSuccessNotification(res.message);
                 reset();
+            },
+            onError: (error) => {
+                addErrorNotification(error.message)
+            },
+            onSettled: () => {
                 document.getElementById("addModal").close()
             }
         }

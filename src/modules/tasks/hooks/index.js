@@ -27,6 +27,8 @@ export function useCreateTask() {
     return useMutation({
         mutationFn: createTask,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+        onError: () => { },
+        onSettled: () => { }
     });
 }
 
@@ -36,6 +38,8 @@ export function useUpdateTask() {
     return useMutation({
         mutationFn: updateTask,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+        onError: () => { },
+        onSettled: () => { }
     });
 }
 
@@ -45,5 +49,6 @@ export function useDeleteTask() {
     return useMutation({
         mutationFn: deleteTask,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+        onError: () => { }
     });
 }

@@ -78,10 +78,12 @@ function GenericForm({ id = "listingForm", fields, defaultValues, onSubmit, isPe
             })}
 
             {showSubmitBtn && (
-                <button type="submit" className="btn btn-primary col-span-full" disabled={isPending}>
-                    {isPending && <span className="loading loading-spinner" />}
-                    {submitLabel}
-                </button>
+                <div className="col-span-full flex justify-end mt-4">
+                    <button type="submit" className="btn btn-primary px-16" disabled={isPending}>
+                        {isPending && <span className="loading loading-spinner" />}
+                        {submitLabel}
+                    </button>
+                </div>
             )}
         </form>
     );
