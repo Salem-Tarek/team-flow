@@ -22,7 +22,7 @@ function ProjectsList() {
             confirmBtnText: 'Delete',
             message:
                 <>
-                    Are you sure you want to delete Project <span className="text-error font-bold">{item.name}</span> ?
+                    Are you sure you want to delete Project <span className="text-error font-bold">{item.name}</span>?
                 </>,
         });
 

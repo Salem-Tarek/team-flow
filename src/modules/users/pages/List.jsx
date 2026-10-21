@@ -49,7 +49,7 @@ function UsersList() {
             confirmBtnText: 'Delete',
             message:
                 <>
-                    Are you sure you want to delete User <span className="text-error font-bold">{item.name}</span> ?
+                    Are you sure you want to delete User <span className="text-error font-bold">{item.name}</span>?
                 </>,
         });
 

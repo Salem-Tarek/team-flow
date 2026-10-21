@@ -7,7 +7,7 @@ export const teamsColumns = [
     { key: "email", label: "Email" },
     { key: "status", label: "Status", type: "badge" },
     { key: "createdAt", label: "Created", type: "date" },
-    { key: "actions", label: "", actions: ["view", "edit", "delete"] },
+    { key: "actions", label: "", actions: ["edit", "delete"] },
 ];
 
 export const usersColumns = [
@@ -40,5 +40,5 @@ export const tasksColumns = [
     { key: "priority", label: "Priority", type: "badge" },
     { key: "status", label: "Status", type: "badge" },
     { key: "dueDate", label: "Due", type: "date" },
-    { key: "actions", label: "", actions: ["view", "edit", "delete"] },
+    { key: "actions", label: "", actions: ["edit", "delete"] },
 ];

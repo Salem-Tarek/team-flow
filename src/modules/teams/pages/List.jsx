@@ -49,7 +49,7 @@ function TeamsList() {
             confirmBtnText: 'Delete',
             message:
                 <>
-                    Are you sure you want to delete Team <span className="text-error font-bold">{item.name}</span> ?
+                    Are you sure you want to delete Team <span className="text-error font-bold">{item.name}</span>?
                 </>,
         });
 

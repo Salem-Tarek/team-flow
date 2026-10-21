@@ -55,7 +55,7 @@ function TasksList() {
             confirmBtnText: 'Delete',
             message:
                 <>
-                    Are you sure you want to delete Task <span className="text-error font-bold">{item.title}</span> ?
+                    Are you sure you want to delete Task <span className="text-error font-bold">{item.title}</span>?
                 </>,
         });
 

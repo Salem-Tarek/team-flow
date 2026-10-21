@@ -5,7 +5,7 @@ import { reactQueryConfig } from "~/config/react-query.config.js";
 // 1. Get List
 export function useTasks(params) {
     return useQuery({
-        queryKey: ["tasks", params],
+        queryKey: ["tasks", "list", params],
         queryFn: () => getTasks(params),
         ...reactQueryConfig
     });
@@ -14,7 +14,7 @@ export function useTasks(params) {
 // 2. Get Single Item 
 export function useTask(id) {
     return useQuery({
-        queryKey: ["tasks", id],
+        queryKey: ["tasks", "detail", id],
         queryFn: () => getTask(id),
         ...reactQueryConfig,
         enabled: !!id
