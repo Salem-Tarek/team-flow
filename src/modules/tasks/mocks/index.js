@@ -153,6 +153,36 @@ const initialTasks = [
         description: "Visual charts representing monthly closed deals and revenue targets.",
         createdAt: "2026-03-29T15:00:00Z",
     },
+    {
+        id: 11,
+        title: "Setup Cypress 11",
+        projectId: 9,
+        projectName: "Automated QA Testing Suite",
+        assigneeId: 27,
+        assigneeName: "Tarek Zaki",
+        type: "task",
+        priority: "medium",
+        status: "todo",
+        dueDate: "2026-06-20",
+        estimateHours: 25,
+        description: "Write end-to-end user flows for checkout and user registration.",
+        createdAt: "2026-03-28T11:20:00Z",
+    },
+    {
+        id: 12,
+        title: "Sales pipeline 12",
+        projectId: 10,
+        projectName: "Enterprise Sales Dashboard",
+        assigneeId: 40,
+        assigneeName: "Dina Samir",
+        type: "feature",
+        priority: "high",
+        status: "in_progress",
+        dueDate: "2026-07-15",
+        estimateHours: 18,
+        description: "Visual charts representing monthly closed deals and revenue targets.",
+        createdAt: "2026-03-29T15:00:00Z",
+    },
 ];
 
 function getStoredTasks() {
@@ -225,9 +255,36 @@ function findAssigneeName(assigneeId) {
 
 export const handlers = [
     // 1. Get List
-    http.get('https://www.teamflow.com/api/tasks', () => {
-        const stored = getStoredTasks();
-        return HttpResponse.json(stored)
+    http.get('https://www.teamflow.com/api/tasks', ({ request }) => {
+        const url = new URL(request.url)
+        const stored = getStoredTasks()
+        const totalItems = stored.length
+
+        if (url.searchParams.get('all') === 'true') {
+            return HttpResponse.json({
+                data: stored,
+                pagination: {
+                    page: 1,
+                    limit: stored.length,
+                    totalPages: 1,
+                    totalItems: stored.length
+                }
+            })
+        }
+
+        const pageSearchParam = Number(url.searchParams.get('page'));
+        const limitSearchParam = Number(url.searchParams.get('limit'));
+
+        const page = Math.max(1, pageSearchParam || 1)
+        const limit = Math.max(1, limitSearchParam || 10)
+
+        const totalPages = Math.max(1, Math.ceil(totalItems / limit))
+        const currentPage = Math.min(page, totalPages)
+
+        const start = (currentPage - 1) * limit
+        const data = stored.slice(start, start + limit)
+
+        return HttpResponse.json({ data, pagination: { page, limit, totalPages, totalItems } })
     }),
 
     // 2. Get single item

@@ -15,17 +15,17 @@ function ProjectsAddEdit() {
     const { data: projectData, isFetching: isLoading } = useProject(params.id);
     const { mutate: createProject, isPending: isCreating } = useCreateProject();
     const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
-    const { data: teamsData = [] } = useTeams();
-    const { data: usersData = [] } = useUsers();
+    const { data: teamsData = [] } = useTeams({ all: true });
+    const { data: usersData = [] } = useUsers({ all: true });
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const projectsFieldsConfig = useMemo(() => {
-        const users = usersData?.map(user => ({
+        const users = usersData?.data?.map(user => ({
             value: user.id,
             label: user.name,
         }))
 
-        const teams = teamsData?.map(team => ({
+        const teams = teamsData?.data?.map(team => ({
             value: team.id,
             label: team.name,
         }))
@@ -43,8 +43,8 @@ function ProjectsAddEdit() {
     }, [mode, projectData]);
 
     const handleFormSubmit = (data, { reset }) => {
-        const teamName = teamsData?.find(team => team.id == data.teamId)?.name;
-        const ownerName = usersData?.find(user => user.id == data.ownerId)?.name;
+        const teamName = teamsData?.data?.find(team => team.id == data.teamId)?.name;
+        const ownerName = usersData?.data?.find(user => user.id == data.ownerId)?.name;
         const options = {
             onSuccess: (res) => {
                 addSuccessNotification(res.message);

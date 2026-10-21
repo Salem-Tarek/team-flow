@@ -4,7 +4,31 @@ import GenericForm from "~/components/form/GenericForm.jsx";
 import GenericModal from "~/components/Modals/index.jsx";
 import { Link } from "react-router-dom";
 
-function GenericListing({ formKey, children, title, onAddClick, onRefresh, columns = [], initialData = [], showCheckbox = true, showActions = true, onEditClick, onDeleteClick, onViewClick, isLoading, showAddNew = true, fields = [], defaultValues = {}, onSubmitForm, addBtnText = 'Add New', modalHeaderText = "Add New", addBtnLink = '' }) {
+function GenericListing({
+    formKey,
+    children,
+    title,
+    onAddClick,
+    onRefresh,
+    columns = [],
+    initialData = [],
+    showCheckbox = true,
+    showActions = true,
+    onEditClick,
+    onDeleteClick,
+    onViewClick,
+    isLoading,
+    showAddNew = true,
+    fields = [],
+    defaultValues = {},
+    onSubmitForm,
+    addBtnText = 'Add New',
+    modalHeaderText = "Add New",
+    addBtnLink = '',
+    currentPage = 1,
+    totalPages = 1,
+    onPageChange,
+}) {
 
     const handleFormSubmit = (data, { reset }) => {
         onSubmitForm(data, { reset })
@@ -67,6 +91,9 @@ function GenericListing({ formKey, children, title, onAddClick, onRefresh, colum
                 onDeleteClick={onDeleteClick}
                 onViewClick={onViewClick}
                 isLoading={isLoading}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
             />
         </div>
     )

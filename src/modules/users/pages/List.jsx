@@ -2,14 +2,26 @@ import GenericListing from "~/components/GenericListing";
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from "../hooks/index.js";
 import { usersColumns } from "~/app/constants/columns.js";
 import { usersFields as fields } from "~/app/constants/fields.js";
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useTeams } from "~/modules/teams/hooks/index.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function UsersList() {
-    const { data: usersData, isFetching: isLoading, refetch } = useUsers();
-    const { data: teamsData } = useTeams();
+    const [pagination, setPagination] = useState({})
+
+    const { data: usersData, isFetching: isLoading, refetch } = useUsers({ page: pagination.page, limit: pagination.limit });
+
+    useEffect(() => {
+        if (usersData) {
+            setPagination((prev) => ({
+                ...prev,
+                ...usersData.pagination,
+            }))
+        }
+    }, [usersData])
+
+    const { data: teamsData } = useTeams({ all: true });
     const { mutate: createUser, isPending: isCreating } = useCreateUser();
     const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
     const [selectedUser, setSelectedUser] = useState({})
@@ -20,7 +32,7 @@ function UsersList() {
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const usersFieldsConfig = useMemo(() => {
-        const teams = teamsData?.map(team => ({
+        const teams = teamsData?.data?.map(team => ({
             value: team.id,
             label: team.name,
         }))
@@ -85,6 +97,13 @@ function UsersList() {
         }
     }
 
+    function handlePageChange(newPage) {
+        setPagination((prev) => ({
+            ...prev,
+            page: newPage,
+        }))
+    }
+
     return (
         <div>
             <GenericListing
@@ -94,7 +113,7 @@ function UsersList() {
                 modalHeaderText={modalHeaderText}
                 onAddClick={() => addBtnClick()}
                 columns={usersColumns}
-                initialData={usersData}
+                initialData={usersData?.data || []}
                 defaultValues={selectedUser}
                 fields={usersFieldsConfig}
                 showCheckbox={true}
@@ -104,6 +123,9 @@ function UsersList() {
                 onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
                 isLoading={isLoading || isCreating || isUpdating || isDeleting}
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
+                onPageChange={(newPage) => handlePageChange(newPage)}
             >
             </GenericListing>
         </div>

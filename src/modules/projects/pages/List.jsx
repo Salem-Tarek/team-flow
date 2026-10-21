@@ -2,11 +2,24 @@ import GenericListing from "~/components/GenericListing";
 import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.js";
 import { useNavigate } from "react-router";
+import { useState, useEffect } from 'react';
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function ProjectsList() {
-    const { data: projectsData, isFetching: isLoading, refetch } = useProjects();
+    const [pagination, setPagination] = useState({})
+
+    const { data: projectsData, isFetching: isLoading, refetch } = useProjects({ page: pagination.page, limit: pagination.limit });
+
+    useEffect(() => {
+        if (projectsData) {
+            setPagination((prev) => ({
+                ...prev,
+                ...projectsData.pagination,
+            }))
+        }
+    }, [projectsData])
+
     const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
     let navigate = useNavigate();
     const { confirm } = useConfirmStore();
@@ -55,13 +68,20 @@ function ProjectsList() {
         })
     }
 
+    function handlePageChange(newPage) {
+        setPagination((prev) => ({
+            ...prev,
+            page: newPage,
+        }))
+    }
+
     return (
         <div>
             <GenericListing
                 title="Projects List"
                 addBtnText="Add Project"
                 columns={projectsColumns}
-                initialData={projectsData}
+                initialData={projectsData?.data || []}
                 showCheckbox={true}
                 showActions={true}
                 onEditClick={(item) => onEditClick(item)}
@@ -71,6 +91,9 @@ function ProjectsList() {
                 onRefresh={() => refetch()}
                 isLoading={isLoading || isDeleting}
                 addBtnLink="/dashboard/projects/add"
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
+                onPageChange={(newPage) => handlePageChange(newPage)}
             >
             </GenericListing>
         </div>

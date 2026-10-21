@@ -132,6 +132,32 @@ const initialTeams = [
         description: "Drives B2B contracts, pitches, and revenue growth.",
         status: "active",
         createdAt: "2026-03-15T16:00:00Z",
+    },
+    {
+        id: 11,
+        name: "Quality Assurance 11",
+        department: "engineering",
+        leadId: 27,
+        leadName: "Tarek Zaki",
+        memberCount: 4,
+        location: "Alexandria",
+        email: "qa@teamflow.com",
+        description: "Performs automated and manual testing to ensure bug-free releases.",
+        status: "inactive",
+        createdAt: "2026-03-10T15:20:00Z",
+    },
+    {
+        id: 12,
+        name: "Sales Enterprise 12",
+        department: "sales",
+        leadId: 40,
+        leadName: "Dina Samir",
+        memberCount: 6,
+        location: "Riyadh",
+        email: "sales@teamflow.com",
+        description: "Drives B2B contracts, pitches, and revenue growth.",
+        status: "active",
+        createdAt: "2026-03-15T16:00:00Z",
     }
 ]
 
@@ -189,9 +215,35 @@ function findLeadName(leadId) {
 
 export const handlers = [
     // 1. Get List
-    http.get('https://www.teamflow.com/api/teams', () => {
-        const stored = getStoredTeams();
-        return HttpResponse.json(stored)
+    http.get('https://www.teamflow.com/api/teams', ({ request }) => {
+        const url = new URL(request.url)
+        const stored = getStoredTeams()
+        const totalItems = stored.length
+
+        if (url.searchParams.get('all') === 'true') {
+            return HttpResponse.json({
+                data: stored,
+                pagination: {
+                    page: 1,
+                    limit: stored.length,
+                    totalPages: 1,
+                    totalItems: stored.length
+                }
+            })
+        }
+
+        const pageSearchParam = Number(url.searchParams.get('page'));
+        const limitSearchParam = Number(url.searchParams.get('limit'));
+
+        const page = Math.max(1, pageSearchParam || 1)
+        const limit = Math.max(1, limitSearchParam || 10)
+        const totalPages = Math.max(1, Math.ceil(totalItems / limit))
+        const currentPage = Math.min(page, totalPages)
+
+        const start = (currentPage - 1) * limit
+        const data = stored.slice(start, start + limit)
+
+        return HttpResponse.json({ data, pagination: { page, limit, totalPages, totalItems } })
     }),
 
     // 2. Get single item

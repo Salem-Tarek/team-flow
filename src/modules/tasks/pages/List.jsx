@@ -3,15 +3,27 @@ import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "../hooks/
 import { tasksColumns } from "~/app/constants/columns.js";
 import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { taskFields as fields } from "~/app/constants/fields.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function TasksList() {
-    const { data: tasksData, isFetching: isLoading, refetch } = useTasks();
-    const { data: usersData } = useUsers();
-    const { data: projectsData } = useProjects();
+    const [pagination, setPagination] = useState({})
+
+    const { data: tasksData, isFetching: isLoading, refetch } = useTasks({ page: pagination.page, limit: pagination.limit });
+
+    useEffect(() => {
+        if (tasksData) {
+            setPagination((prev) => ({
+                ...prev,
+                ...tasksData.pagination,
+            }))
+        }
+    }, [tasksData])
+
+    const { data: usersData } = useUsers({ all: true });
+    const { data: projectsData } = useProjects({ all: true });
     const { mutate: createTask, isPending: isCreating } = useCreateTask();
     const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
     const [selectedTask, setSelectedTask] = useState({})
@@ -22,11 +34,11 @@ function TasksList() {
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const tasksFieldsConfig = useMemo(() => {
-        const users = usersData?.map(user => ({
+        const users = usersData?.data?.map(user => ({
             value: user.id,
             label: user.name,
         }))
-        const projects = projectsData?.map(project => ({
+        const projects = projectsData?.data?.map(project => ({
             value: project.id,
             label: project.name,
         }))
@@ -92,6 +104,13 @@ function TasksList() {
         }
     }
 
+    function handlePageChange(newPage) {
+        setPagination((prev) => ({
+            ...prev,
+            page: newPage,
+        }))
+    }
+
     return (
         <div>
             <GenericListing
@@ -101,7 +120,7 @@ function TasksList() {
                 modalHeaderText={modalHeaderText}
                 onAddClick={() => addBtnClick()}
                 columns={tasksColumns}
-                initialData={tasksData}
+                initialData={tasksData?.data || []}
                 defaultValues={selectedTask}
                 fields={tasksFieldsConfig}
                 showCheckbox={true}
@@ -111,6 +130,9 @@ function TasksList() {
                 onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
                 isLoading={isLoading || isCreating || isUpdating || isDeleting}
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
+                onPageChange={(newPage) => handlePageChange(newPage)}
             >
             </GenericListing>
         </div>

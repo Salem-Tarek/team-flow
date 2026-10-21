@@ -117,7 +117,11 @@ function DashboardLayout() {
 
         if (ok) {
             clearAllDataUpdates()
+            // TODO: Handle it to update the data instanly without reload
             addSuccessNotification('Data Reseted Successfully');
+            setTimeout(() => {
+                window.location.reload()
+            }, 500)
         }
     }
 

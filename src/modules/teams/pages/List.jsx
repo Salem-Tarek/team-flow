@@ -2,14 +2,26 @@ import GenericListing from "~/components/GenericListing";
 import { useTeams, useCreateTeam, useUpdateTeam, useDeleteTeam } from "../hooks/index.js";
 import { teamsColumns } from "~/app/constants/columns.js";
 import { teamsFields as fields } from "~/app/constants/fields.js";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useUsers } from "~/modules/users/hooks/index.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function TeamsList() {
-    const { data: teamsData, isFetching: isLoading, refetch } = useTeams();
-    const { data: usersData } = useUsers();
+    const [pagination, setPagination] = useState({})
+
+    const { data: teamsData, isFetching: isLoading, refetch } = useTeams({ page: pagination.page, limit: pagination.limit });
+
+    useEffect(() => {
+        if (teamsData) {
+            setPagination((prev) => ({
+                ...prev,
+                ...teamsData.pagination,
+            }))
+        }
+    }, [teamsData])
+
+    const { data: usersData } = useUsers({ all: true });
     const { mutate: createTeam, isPending: isCreating } = useCreateTeam();
     const { mutate: updateTeam, isPending: isUpdating } = useUpdateTeam();
     const [selectedTeam, setSelectedTeam] = useState({})
@@ -20,7 +32,7 @@ function TeamsList() {
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     const teamsFieldsConfig = useMemo(() => {
-        const users = usersData?.map(user => ({
+        const users = usersData?.data?.map(user => ({
             value: user.id,
             label: user.name,
         }))
@@ -85,6 +97,13 @@ function TeamsList() {
         }
     }
 
+    function handlePageChange(newPage) {
+        setPagination((prev) => ({
+            ...prev,
+            page: newPage,
+        }))
+    }
+
     return (
         <div>
             <GenericListing
@@ -94,7 +113,7 @@ function TeamsList() {
                 modalHeaderText={modalHeaderText}
                 onAddClick={() => addBtnClick()}
                 columns={teamsColumns}
-                initialData={teamsData}
+                initialData={teamsData?.data || []}
                 defaultValues={selectedTeam}
                 fields={teamsFieldsConfig}
                 showCheckbox={true}
@@ -104,6 +123,9 @@ function TeamsList() {
                 onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
                 onRefresh={() => refetch()}
                 isLoading={isLoading || isCreating || isUpdating || isDeleting}
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
+                onPageChange={(newPage) => handlePageChange(newPage)}
             >
             </GenericListing>
         </div>
