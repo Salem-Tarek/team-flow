@@ -27,7 +27,10 @@ function GenericListing({
     addBtnLink = '',
     currentPage = 1,
     totalPages = 1,
+    totalItems = 0,
     onPageChange,
+    perPage = 10,
+    onPerPageChange,
 }) {
 
     const handleFormSubmit = (data, { reset }) => {
@@ -93,7 +96,10 @@ function GenericListing({
                 isLoading={isLoading}
                 currentPage={currentPage}
                 totalPages={totalPages}
+                totalItems={totalItems}
                 onPageChange={onPageChange}
+                perPage={perPage}
+                onPerPageChange={onPerPageChange}
             />
         </div>
     )

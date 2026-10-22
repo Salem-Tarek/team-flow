@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react"
+import { FormSelect } from "~/components/form/index.js"
 
 function GenericTable({
   columns = [],
@@ -11,13 +12,18 @@ function GenericTable({
   isLoading,
   currentPage = 1,
   totalPages = 1,
+  totalItems = 0,
   onPageChange,
+  perPage = 10,
+  onPerPageChange,
 }) {
   const [data, setData] = useState(initialData)
 
   const updatePage = (newPage) => {
     onPageChange?.(newPage)
   }
+
+  const showedItemsCount = Math.min(data?.length || totalItems, perPage)
 
   const checkAll = data?.length > 0 && data?.every((item) => item.checked)
 
@@ -271,15 +277,27 @@ function GenericTable({
           </tbody>
         </table>
       </div>
-      <div className={`flex justify-end mt-6 ${totalPages <= 1 ? "hidden" : ""}`}>
-        <div className="join">
-          <button onClick={() => updatePage(currentPage - 1)} className={`join-item btn ${currentPage === 1 ? "btn-disabled" : ""}`}>«</button>
-          {
-            Array.from({ length: totalPages }).map((_, index) => (
-              <button onClick={() => updatePage(index + 1)} key={index} className={`join-item btn ${index + 1 === currentPage ? "btn-primary" : ""}`}>{index + 1}</button>
-            ))
-          }
-          <button onClick={() => updatePage(currentPage + 1)} className={`join-item btn ${currentPage === totalPages ? "btn-disabled" : ""}`}>»</button>
+      <div className="flex flex-col tablet:flex-row gap-2 justify-between items-start tablet:items-center mt-6">
+        <p className="flex gap-1">
+          Showing {showedItemsCount} of {totalItems}
+        </p>
+        <div className="flex gap-2 items-center max-tablet:self-end">
+          <FormSelect value={perPage} onChange={(e) => onPerPageChange?.(Number(e.target.value))} options={[
+            { value: 10, label: "10" },
+            { value: 25, label: "25" },
+            { value: 50, label: "50" },
+            { value: 100, label: "100" },
+          ]} />
+
+          <div className={`join`}>
+            <button onClick={() => updatePage(currentPage - 1)} className={`join-item btn ${currentPage === 1 ? "btn-disabled" : ""}`}>«</button>
+            {
+              Array.from({ length: totalPages }).map((_, index) => (
+                <button onClick={() => updatePage(index + 1)} key={index} className={`join-item btn ${index + 1 === currentPage ? "btn-primary" : ""}`}>{index + 1}</button>
+              ))
+            }
+            <button onClick={() => updatePage(currentPage + 1)} className={`join-item btn ${currentPage === totalPages ? "btn-disabled" : ""}`}>»</button>
+          </div>
         </div>
       </div>
     </>

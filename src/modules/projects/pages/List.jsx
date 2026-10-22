@@ -75,6 +75,14 @@ function ProjectsList() {
         }))
     }
 
+    function handlePerPageChange(newLimit) {
+        setPagination((prev) => ({
+            ...prev,
+            limit: newLimit,
+            page: 1,
+        }))
+    }
+
     return (
         <div>
             <GenericListing
@@ -93,7 +101,10 @@ function ProjectsList() {
                 addBtnLink="/dashboard/projects/add"
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
+                totalItems={pagination.totalItems}
                 onPageChange={(newPage) => handlePageChange(newPage)}
+                perPage={pagination.limit}
+                onPerPageChange={(newLimit) => handlePerPageChange(newLimit)}
             >
             </GenericListing>
         </div>
