@@ -7,19 +7,26 @@ import miniDarkLogo from '@/assets/images/mini-dark-logo.png'
 import { NavLink } from "react-router-dom";
 import GenericBtn from "~/components/GenericBtn/index.jsx";
 import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useTasks } from "~/modules/tasks/hooks";
 import { useProjects } from "~/modules/projects/hooks";
 import { useUsers } from "~/modules/users/hooks";
 import { useTeams } from "~/modules/teams/hooks";
+import Breadcrumb from "~/components/layout/Breadcrumb.jsx";
+import { useLogout } from '~/modules/auth/hooks/useAuth.js'
+import { useNavigate } from "react-router-dom";
 
 function DashboardLayout() {
+    const navigate = useNavigate();
     const { confirm } = useConfirmStore();
-    const { addSuccessNotification } = useNotificationsStore();
+    const { breadcrumbItems } = useBreadcrumbStore();
+    const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
     const { refetch: refetchUsers } = useUsers();
     const { refetch: refetchTasks } = useTasks();
     const { refetch: refetchProjects } = useProjects();
     const { refetch: refetchTeams } = useTeams();
+    const { mutate: logout } = useLogout();
 
     const Icon = ({ children }) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4">
@@ -105,6 +112,18 @@ function DashboardLayout() {
         refetchTeams();
     }
 
+    const handleLogout = () => {
+        logout({}, {
+            onSuccess: (res) => {
+                addSuccessNotification(res.message);
+                navigate("/auth/login");
+            },
+            onError: (error) => {
+                addErrorNotification(error?.response?.data?.message || error?.message)
+            },
+        });
+    }
+
     const resetData = async () => {
         const ok = await confirm({
             modalHeader: 'Reset Data',
@@ -148,7 +167,7 @@ function DashboardLayout() {
                                 <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li><a>Profile</a></li>
                                     {/* <li><a>Settings</a></li> */}
-                                    <li><a>Logout</a></li>
+                                    <li onClick={handleLogout}><a href="javascript:;">Logout</a></li>
                                 </ul>
                             </details>
                         </div>
@@ -157,6 +176,9 @@ function DashboardLayout() {
                     <div className="grow">
                         {/* Main Content Area */}
                         <main className="flex-1 p-6">
+                            <div className="flex justify-end mb-6">
+                                <Breadcrumb items={breadcrumbItems} />
+                            </div>
                             <Outlet />
                         </main>
                     </div>

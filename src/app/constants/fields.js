@@ -331,3 +331,22 @@ export const taskFields = (projects = [], users = []) => [
         rules: z.string().max(500, "Max 500 characters").optional(),
     },
 ];
+
+export const loginFields = [
+    {
+        name: "email",
+        label: "Email",
+        type: "email",
+        isRequired: true,
+        placeholder: "Enter your email",
+        rules: z.string().min(1, "Email is required").email("Enter a valid email"),
+    },
+    {
+        name: "password",
+        label: "Password",
+        type: "password",
+        isRequired: true,
+        placeholder: "Enter your password",
+        rules: z.string().min(1, "Password is required"),
+    },
+];

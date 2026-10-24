@@ -1,4 +1,14 @@
+import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
+import { useEffect } from 'react'
+
 function Overview() {
+    const { setBreadcrumbItems } = useBreadcrumbStore()
+    useEffect(() => {
+        setBreadcrumbItems([
+            { to: "", label: "Dashboard" },
+        ])
+    }, [])
+
     return (
         <div className="space-y-8">
             {/* Header / Hero Banner with Primary Colors */}

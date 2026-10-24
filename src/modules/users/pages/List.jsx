@@ -5,10 +5,18 @@ import { usersFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo, useEffect } from 'react'
 import { useTeams } from "~/modules/teams/hooks/index.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 
 function UsersList() {
     const [pagination, setPagination] = useState({})
+    const { setBreadcrumbItems } = useBreadcrumbStore()
+    useEffect(() => {
+        setBreadcrumbItems([
+            { to: "/dashboard", label: "Dashboard" },
+            { to: "/dashboard/users", label: "Users" }
+        ])
+    }, [])
 
     const { data: usersData, isFetching: isLoading, refetch } = useUsers({ page: pagination.page, limit: pagination.limit });
 

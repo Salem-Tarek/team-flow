@@ -5,9 +5,17 @@ import { useNavigate } from "react-router";
 import { useState, useEffect } from 'react';
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
+import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 
 function ProjectsList() {
     const [pagination, setPagination] = useState({})
+    const { setBreadcrumbItems } = useBreadcrumbStore()
+    useEffect(() => {
+        setBreadcrumbItems([
+            { to: "/dashboard", label: "Dashboard" },
+            { to: "/dashboard/projects", label: "Projects" }
+        ])
+    }, [])
 
     const { data: projectsData, isFetching: isLoading, refetch } = useProjects({ page: pagination.page, limit: pagination.limit });
 

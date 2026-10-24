@@ -6,11 +6,21 @@ import { useState, useMemo, useEffect } from "react";
 import { useUsers } from "~/modules/users/hooks/index.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
+import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 
 function TeamsList() {
     const [pagination, setPagination] = useState({})
+    const { setBreadcrumbItems } = useBreadcrumbStore()
+    useEffect(() => {
+        setBreadcrumbItems([
+            { to: "/dashboard", label: "Dashboard" },
+            { to: "/dashboard/teams", label: "Teams" }
+        ])
+    }, [])
+
 
     const { data: teamsData, isFetching: isLoading, refetch } = useTeams({ page: pagination.page, limit: pagination.limit });
+
 
     useEffect(() => {
         if (teamsData) {

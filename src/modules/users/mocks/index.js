@@ -5,8 +5,9 @@ const STORAGE_KEY = 'users'
 const initialUsers = [
     {
         id: 1,
-        name: "Sara Ahmed",
-        email: "sara@teamflow.com",
+        name: "Salem Tarek",
+        email: "salem@teamflow.com",
+        password: "admin@123",
         role: "admin",
         status: "active",
         jobTitle: "Frontend Developer",
@@ -19,6 +20,7 @@ const initialUsers = [
         id: 2,
         name: "Omar Hassan",
         email: "omar.hassan@teamflow.com",
+        password: "Om@r$2026#",
         role: "manager",
         status: "active",
         jobTitle: "Engineering Manager",
@@ -31,6 +33,7 @@ const initialUsers = [
         id: 3,
         name: "Nour Mahmoud",
         email: "nour.m@teamflow.com",
+        password: "Nour!Ds9#",
         role: "member",
         status: "active",
         jobTitle: "UI/UX Designer",
@@ -43,6 +46,7 @@ const initialUsers = [
         id: 4,
         name: "Karim Ibrahim",
         email: "karim.i@teamflow.com",
+        password: "K@rim*4567",
         role: "member",
         status: "inactive",
         jobTitle: "Backend Developer",
@@ -55,6 +59,7 @@ const initialUsers = [
         id: 5,
         name: "Laila Youssef",
         email: "laila@teamflow.com",
+        password: "Lail@Prd#9",
         role: "manager",
         status: "active",
         jobTitle: "Product Manager",
@@ -67,6 +72,7 @@ const initialUsers = [
         id: 6,
         name: "Tarek Mostafa",
         email: "tarek.m@teamflow.com",
+        password: "Trk#Dev2026",
         role: "member",
         status: "active",
         jobTitle: "DevOps Engineer",
@@ -79,6 +85,7 @@ const initialUsers = [
         id: 7,
         name: "Hana Khaled",
         email: "hana.k@teamflow.com",
+        password: "Hana$QA!88",
         role: "member",
         status: "active",
         jobTitle: "QA Automation Engineer",
@@ -91,6 +98,7 @@ const initialUsers = [
         id: 8,
         name: "Youssef Ali",
         email: "youssef.ali@teamflow.com",
+        password: "Youseef@Cto#1",
         role: "admin",
         status: "active",
         jobTitle: "CTO",
@@ -103,6 +111,7 @@ const initialUsers = [
         id: 9,
         name: "Dina Samir",
         email: "dina.s@teamflow.com",
+        password: "Din@Data*99",
         role: "member",
         status: "inactive",
         jobTitle: "Data Analyst",
@@ -115,6 +124,7 @@ const initialUsers = [
         id: 10,
         name: "Ahmed Reda",
         email: "ahmed.r@teamflow.com",
+        password: "Ahmd@Full#3",
         role: "member",
         status: "active",
         jobTitle: "Fullstack Developer",
@@ -127,6 +137,7 @@ const initialUsers = [
         id: 11,
         name: "Dina Samir 11",
         email: "dina.s@teamflow.com",
+        password: "Dina$11#Pass",
         role: "member",
         status: "inactive",
         jobTitle: "Data Analyst",
@@ -139,6 +150,7 @@ const initialUsers = [
         id: 12,
         name: "Ahmed Reda 12",
         email: "ahmed.r@teamflow.com",
+        password: "Ahmed$12#Pass",
         role: "member",
         status: "active",
         jobTitle: "Fullstack Developer",
@@ -147,7 +159,9 @@ const initialUsers = [
         teamName: "Core API",
         createdAt: "2026-06-10T09:50:00Z",
     },
-]
+];
+
+const withoutPassword = ({ password, ...rest }) => rest
 
 function getStoredUsers() {
     try {
@@ -210,7 +224,7 @@ export const handlers = [
 
         if (url.searchParams.get('all') === 'true') {
             return HttpResponse.json({
-                data: stored,
+                data: stored?.map(withoutPassword) || [],
                 pagination: {
                     page: 1,
                     limit: stored.length,
@@ -232,7 +246,7 @@ export const handlers = [
         const start = (currentPage - 1) * limit
         const data = stored.slice(start, start + limit)
 
-        return HttpResponse.json({ data, pagination: { page, limit, totalPages, totalItems } })
+        return HttpResponse.json({ data: data?.map(withoutPassword) || [], pagination: { page, limit, totalPages, totalItems } })
     }),
 
     // 2. Get single item
@@ -328,3 +342,5 @@ export const handlers = [
         }, { status: 200 });
     })
 ]
+
+export { initialUsers as seedData, STORAGE_KEY }

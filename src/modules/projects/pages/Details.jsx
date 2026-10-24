@@ -1,6 +1,8 @@
 
 import { useParams, Link } from "react-router";
 import { useProject } from "../hooks/index.js";
+import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
+import { useEffect } from 'react'
 
 const statusColor = {
     planning: "badge-info",
@@ -104,6 +106,15 @@ function ProjectDetailsSkeleton() {
 function ProjectDetails() {
     const { id } = useParams();
     const { data: projectData, isLoading } = useProject(id);
+    const { setBreadcrumbItems } = useBreadcrumbStore()
+    useEffect(() => {
+        if (!projectData) return;
+        setBreadcrumbItems([
+            { to: "/dashboard", label: "Dashboard" },
+            { to: `/dashboard/projects`, label: "Projects" },
+            { to: ``, label: projectData?.name }
+        ])
+    }, [projectData])
 
     if (isLoading) return <ProjectDetailsSkeleton />;
 
