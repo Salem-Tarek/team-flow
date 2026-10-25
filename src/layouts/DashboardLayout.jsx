@@ -165,9 +165,9 @@ function DashboardLayout() {
                             <details className="dropdown dropdown-end">
                                 <summary className="btn m-1">Salem Tarek</summary>
                                 <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                    <li><a>Profile</a></li>
+                                    <li><span>Profile</span></li>
                                     {/* <li><a>Settings</a></li> */}
-                                    <li onClick={handleLogout}><a href="javascript:;">Logout</a></li>
+                                    <li onClick={handleLogout}><span>Logout</span></li>
                                 </ul>
                             </details>
                         </div>
