@@ -12,16 +12,11 @@ function AuthLayout() {
                     className="max-w-full max-h-full h-full object-cover rounded-2xl shadow-xl z-0"
                 />
             </div>
-
-            {/* Right side: Form container */}
             <div className="w-full flex flex-col justify-center items-center p-8 bg-base-100 relative">
                 <div className="w-full max-w-md">
-                    {/* Dynamic Title / Form Content Container */}
                     <h2 className="text-2xl font-bold text-base-content mb-6 text-center">
-                        Authentication Form
+                        Login
                     </h2>
-
-                    {/* Child route form (Login, Signup, etc.) will render here */}
                     <Outlet />
                 </div>
             </div>

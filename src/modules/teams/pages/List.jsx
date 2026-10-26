@@ -19,7 +19,7 @@ function TeamsList() {
     }, [])
 
 
-    const { data: teamsData, isFetching: isLoading, refetch } = useTeams({ page: pagination.page, limit: pagination.limit });
+    const { data: teamsData, isFetching: isLoading, refetch } = useTeams({ page: pagination.page || 1, limit: pagination.limit || 10 });
 
 
     useEffect(() => {

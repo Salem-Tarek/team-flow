@@ -19,7 +19,7 @@ function TasksList() {
         ])
     }, [])
 
-    const { data: tasksData, isFetching: isLoading, refetch } = useTasks({ page: pagination.page, limit: pagination.limit });
+    const { data: tasksData, isFetching: isLoading, refetch } = useTasks({ page: pagination.page || 1, limit: pagination.limit || 10 });
 
     useEffect(() => {
         if (tasksData) {

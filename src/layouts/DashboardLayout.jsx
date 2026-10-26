@@ -9,23 +9,17 @@ import GenericBtn from "~/components/GenericBtn/index.jsx";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
-import { useTasks } from "~/modules/tasks/hooks";
-import { useProjects } from "~/modules/projects/hooks";
-import { useUsers } from "~/modules/users/hooks";
-import { useTeams } from "~/modules/teams/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import Breadcrumb from "~/components/layout/Breadcrumb.jsx";
 import { useLogout } from '~/modules/auth/hooks/useAuth.js'
 import { useNavigate } from "react-router-dom";
 
 function DashboardLayout() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const { confirm } = useConfirmStore();
     const { breadcrumbItems } = useBreadcrumbStore();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
-    const { refetch: refetchUsers } = useUsers();
-    const { refetch: refetchTasks } = useTasks();
-    const { refetch: refetchProjects } = useProjects();
-    const { refetch: refetchTeams } = useTeams();
     const { mutate: logout } = useLogout();
 
     const Icon = ({ children }) => (
@@ -106,20 +100,23 @@ function DashboardLayout() {
         localStorage.removeItem('tasks');
         localStorage.removeItem('projects');
         localStorage.removeItem('teams');
-        refetchTasks();
-        refetchProjects();
-        refetchUsers();
-        refetchTeams();
+        queryClient.invalidateQueries({ queryKey: ["tasks"] });
+        queryClient.invalidateQueries({ queryKey: ["projects"] });
+        queryClient.invalidateQueries({ queryKey: ["users"] });
+        queryClient.invalidateQueries({ queryKey: ["teams"] });
     }
 
     const handleLogout = () => {
         logout({}, {
             onSuccess: (res) => {
+                // navigate("/auth/login", { replace: true });
+                // queryClient.clear();
                 addSuccessNotification(res.message);
-                navigate("/auth/login");
             },
             onError: (error) => {
-                addErrorNotification(error?.response?.data?.message || error?.message)
+                navigate("/auth/login", { replace: true });
+                queryClient.clear();
+                addErrorNotification(error?.response?.data?.message || error?.message);
             },
         });
     }
@@ -136,11 +133,7 @@ function DashboardLayout() {
 
         if (ok) {
             clearAllDataUpdates()
-            // TODO: Handle it to update the data instanly without reload
             addSuccessNotification('Data Reseted Successfully');
-            setTimeout(() => {
-                window.location.reload()
-            }, 500)
         }
     }
 

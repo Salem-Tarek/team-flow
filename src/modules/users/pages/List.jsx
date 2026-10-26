@@ -18,7 +18,7 @@ function UsersList() {
         ])
     }, [])
 
-    const { data: usersData, isFetching: isLoading, refetch } = useUsers({ page: pagination.page, limit: pagination.limit });
+    const { data: usersData, isFetching: isLoading, refetch } = useUsers({ page: pagination.page || 1, limit: pagination.limit || 10 });
 
     useEffect(() => {
         if (usersData) {

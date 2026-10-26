@@ -17,7 +17,7 @@ function ProjectsList() {
         ])
     }, [])
 
-    const { data: projectsData, isFetching: isLoading, refetch } = useProjects({ page: pagination.page, limit: pagination.limit });
+    const { data: projectsData, isFetching: isLoading, refetch } = useProjects({ page: pagination?.page || 1, limit: pagination?.limit || 10 });
 
     useEffect(() => {
         if (projectsData) {

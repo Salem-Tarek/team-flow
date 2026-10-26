@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "../stores/authStore";
-
 import { login, logout, getCurrentUser } from "../services/index";
+import { useNavigate } from "react-router-dom";
 
 export function useLogin() {
     const { setSession } = useAuthStore();
@@ -16,12 +15,17 @@ export function useLogin() {
 export function useLogout() {
     const queryClient = useQueryClient();
     const { clearSession } = useAuthStore();
+    const navigate = useNavigate();
 
     return useMutation({
         mutationFn: logout,
         onSettled: () => {
-            clearSession();
-            queryClient.clear();
+            navigate("/auth/login", { replace: true });
+            setTimeout(() => {
+                queryClient.cancelQueries();
+                clearSession();
+                queryClient.clear();
+            }, 500)
         },
     });
 }
