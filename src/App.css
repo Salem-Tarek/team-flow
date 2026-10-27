@@ -302,3 +302,7 @@ body {
         @apply border-info;
     }
 }
+
+.badge {
+    @apply h-auto;
+}

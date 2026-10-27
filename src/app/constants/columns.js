@@ -1,10 +1,22 @@
 import dayjs from 'dayjs'
 
 const tasksStatusConfig = {
-    "to_do": "neutral",
-    "in_progress": "info",
-    "in_review": "warning",
-    "completed": "success",
+    "todo": {
+        color: "neutral",
+        label: "To Do"
+    },
+    "in_progress": {
+        color: "info",
+        label: "In Progress"
+    },
+    "in_review": {
+        color: "warning",
+        label: "In Review"
+    },
+    "completed": {
+        color: "success",
+        label: "Completed"
+    },
 };
 
 const tasksPriorityConfig = {
@@ -86,11 +98,12 @@ export const tasksColumns = [
         key: "status",
         label: "Status",
         htmlStrcuture: ({ value }) => {
-            const status = tasksStatusConfig[value?.toLowerCase()] || "neutral";
+            const statusColor = tasksStatusConfig[value?.toLowerCase()]?.color || "neutral";
+            const statusLabel = tasksStatusConfig[value?.toLowerCase()]?.label || "neutral";
 
             return `
-        <span class="capitalize badge badge-${status}">
-            ${value || "Select..."}
+        <span class="capitalize badge badge-${statusColor}">
+            ${statusLabel || "Select..."}
         </span>
     `;
         },
