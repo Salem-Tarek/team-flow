@@ -1,3 +1,19 @@
+import dayjs from 'dayjs'
+
+const tasksStatusConfig = {
+    "to_do": "neutral",
+    "in_progress": "info",
+    "in_review": "warning",
+    "completed": "success",
+};
+
+const tasksPriorityConfig = {
+    low: "success",
+    medium: "info",
+    high: "warning",
+    urgent: "error",
+};
+
 export const teamsColumns = [
     { key: "name", label: "Name" },
     { key: "department", label: "Department" },
@@ -5,18 +21,30 @@ export const teamsColumns = [
     { key: "memberCount", label: "Members" },
     { key: "location", label: "Location" },
     { key: "email", label: "Email" },
-    { key: "status", label: "Status", type: "badge" },
-    { key: "createdAt", label: "Created", type: "date" },
+    {
+        key: "status",
+        label: "Status",
+        htmlStrcuture: ({ value }) => `<span class="capitalize badge badge-${value === "active" ? "success" : "error"}">${value}</span>`
+    },
+    { key: "createdAt", label: "Created" },
     { key: "actions", label: "", actions: ["edit", "delete"] },
 ];
 
 export const usersColumns = [
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
-    { key: "role", label: "Role", type: "badge" },
+    { key: "role", label: "Role" },
     { key: "teamName", label: "Team" },
-    { key: "status", label: "Status", type: "badge" },
-    { key: "createdAt", label: "Created", type: "date" },
+    {
+        key: "status",
+        label: "Status",
+        htmlStrcuture: ({ value }) => `<span class="capitalize badge badge-${value === "active" ? "success" : "error"}">${value}</span>`
+    },
+    {
+        key: "createdAt",
+        label: "Created",
+        htmlStrcuture: ({ value }) => dayjs(value).format("DD-MM-YYYY")
+    },
     { key: "actions", label: "", actions: ["edit", "delete"] },
 ];
 
@@ -25,10 +53,14 @@ export const projectsColumns = [
     { key: "clientName", label: "Client" },
     { key: "teamName", label: "Team" },
     { key: "ownerName", label: "Owner" },
-    { key: "priority", label: "Priority", type: "badge" },
-    { key: "status", label: "Status", type: "badge" },
+    { key: "priority", label: "Priority" },
+    {
+        key: "status",
+        label: "Status",
+        htmlStrcuture: ({ value }) => `<span class="capitalize badge badge-${value === "active" ? "success" : "error"}">${value}</span>`
+    },
     { key: "progress", label: "Progress" },
-    { key: "dueDate", label: "Due", type: "date" },
+    { key: "dueDate", label: "Due" },
     { key: "actions", label: "", actions: ["view", "edit", "delete"] },
 ];
 
@@ -36,9 +68,33 @@ export const tasksColumns = [
     { key: "title", label: "Task" },
     { key: "projectName", label: "Project" },
     { key: "assigneeName", label: "Assignee" },
-    { key: "type", label: "Type", type: "badge" },
-    { key: "priority", label: "Priority", type: "badge" },
-    { key: "status", label: "Status", type: "badge" },
-    { key: "dueDate", label: "Due", type: "date" },
+    { key: "type", label: "Type" },
+    {
+        key: "priority",
+        label: "Priority",
+        htmlStrcuture: ({ value }) => {
+            const status = tasksPriorityConfig[value?.toLowerCase()] || "neutral";
+
+            return `
+        <span class="capitalize badge badge-${status}">
+            ${value || "Select..."}
+        </span>
+    `;
+        },
+    },
+    {
+        key: "status",
+        label: "Status",
+        htmlStrcuture: ({ value }) => {
+            const status = tasksStatusConfig[value?.toLowerCase()] || "neutral";
+
+            return `
+        <span class="capitalize badge badge-${status}">
+            ${value || "Select..."}
+        </span>
+    `;
+        },
+    },
+    { key: "dueDate", label: "Due" },
     { key: "actions", label: "", actions: ["edit", "delete"] },
 ];

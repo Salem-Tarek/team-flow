@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { FormSelect } from "~/components/form/index.js"
+import parse from 'html-react-parser';
 
 function GenericTable({
   columns = [],
@@ -186,11 +187,7 @@ function GenericTable({
                     if (column.key !== "actions") {
                       return (
                         <td key={`row_${column.key}`}>
-                          <div className="flex items-center gap-3">
-                            <div className="font-bold">
-                              {item[column.key]}
-                            </div>
-                          </div>
+                          {column.htmlStrcuture ? <>{parse(column.htmlStrcuture({ value: item[column.key], label: column.label }))}</> : item[column.key]}
                         </td>
                       )
                     }
@@ -290,13 +287,13 @@ function GenericTable({
           ]} />
 
           <div className={`join`}>
-            <button onClick={() => updatePage(currentPage - 1)} className={`join-item btn ${currentPage === 1 ? "btn-disabled" : ""}`}>«</button>
+            <button onClick={() => updatePage(currentPage - 1)} className={`join-item btn ${(currentPage === 1 || isLoading) ? "btn-disabled" : ""}`}>«</button>
             {
               Array.from({ length: totalPages }).map((_, index) => (
-                <button onClick={() => updatePage(index + 1)} key={index} className={`join-item btn ${index + 1 === currentPage ? "btn-primary" : ""}`}>{index + 1}</button>
+                <button onClick={() => updatePage(index + 1)} key={index} className={`join-item btn ${index + 1 === currentPage ? "btn-primary" : ""} ${isLoading ? "btn-disabled" : ""}`}>{index + 1}</button>
               ))
             }
-            <button onClick={() => updatePage(currentPage + 1)} className={`join-item btn ${currentPage === totalPages ? "btn-disabled" : ""}`}>»</button>
+            <button onClick={() => updatePage(currentPage + 1)} className={`join-item btn ${(currentPage === totalPages || isLoading) ? "btn-disabled" : ""}`}>»</button>
           </div>
         </div>
       </div>
