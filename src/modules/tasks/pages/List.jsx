@@ -8,16 +8,12 @@ import { taskFields as fields } from "~/app/constants/fields.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
+import { useSearchParams } from "react-router";
 
 function TasksList() {
     const [pagination, setPagination] = useState({})
     const { setBreadcrumbItems } = useBreadcrumbStore()
-    useEffect(() => {
-        setBreadcrumbItems([
-            { to: "/dashboard", label: "Dashboard" },
-            { to: "/dashboard/tasks", label: "Tasks" }
-        ])
-    }, [])
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const { data: tasksData, isFetching: isLoading, refetch } = useTasks({ page: pagination.page || 1, limit: pagination.limit || 10 });
 
@@ -90,6 +86,17 @@ function TasksList() {
             })
         }
     }
+
+    useEffect(() => {
+        const isCreateTask = searchParams.get('createtask') === 'true';
+        if (isCreateTask) {
+            addBtnClick()
+        }
+        setBreadcrumbItems([
+            { to: "/dashboard", label: "Dashboard" },
+            { to: "/dashboard/tasks", label: "Tasks" }
+        ])
+    }, [])
 
     function onSubmitForm(data, { reset }) {
         const options = {

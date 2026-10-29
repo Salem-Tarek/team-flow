@@ -12,6 +12,7 @@ import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useQueryClient } from "@tanstack/react-query";
 import Breadcrumb from "~/components/layout/Breadcrumb.jsx";
 import { useLogout } from '~/modules/auth/hooks/useAuth.js'
+import useAuthStore from '~/modules/auth/stores/authStore.js'
 import { useNavigate } from "react-router-dom";
 
 function DashboardLayout() {
@@ -21,6 +22,7 @@ function DashboardLayout() {
     const { breadcrumbItems } = useBreadcrumbStore();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
     const { mutate: logout } = useLogout();
+    const { user } = useAuthStore();
 
     const Icon = ({ children }) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4">
@@ -156,7 +158,7 @@ function DashboardLayout() {
                         <div className="flex items-center gap-1">
                             <ThemeToggle />
                             <details className="dropdown dropdown-end">
-                                <summary className="btn m-1">Salem Tarek</summary>
+                                <summary className="btn m-1">{user?.name || '-'}</summary>
                                 <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li><span>Profile</span></li>
                                     {/* <li><a>Settings</a></li> */}

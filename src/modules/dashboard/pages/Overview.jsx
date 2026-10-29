@@ -1,7 +1,89 @@
+
+import GenericBtn from "~/components/GenericBtn/index.jsx";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useEffect } from 'react'
+import Icon from '../components/Icon.jsx'
+import TaskStatusChart from '../components/TaskStatusChart.jsx'
+import WeeklyActivityChart from '../components/WeeklyActivityChart.jsx'
+import RecentTasks from '../components/RecentTasks.jsx'
 
-function Overview() {
+// Static data — replace with your MSW-backed API response later.
+const stats = [
+    {
+        title: "Total Projects",
+        value: 12,
+        subtitle: "8 active projects",
+        change: "+12%",
+        icon: "folder",
+        color: "text-primary",
+        iconBg: "bg-primary/10",
+        progress: 72,
+        progressColor: "bg-primary",
+    },
+    {
+        title: "Total Tasks",
+        value: 86,
+        subtitle: "24 in progress",
+        change: "+8%",
+        icon: "tasks",
+        color: "text-primary",
+        iconBg: "bg-primary/10",
+        progress: 64,
+        progressColor: "bg-primary",
+    },
+    {
+        title: "Completed Tasks",
+        value: 54,
+        subtitle: "63% completion rate",
+        change: "+18%",
+        icon: "check",
+        color: "text-success",
+        iconBg: "bg-success/10",
+        progress: 63,
+        progressColor: "bg-success",
+    },
+    {
+        title: "Team Members",
+        value: 18,
+        subtitle: "Across 4 teams",
+        change: "+5%",
+        icon: "users",
+        color: "text-primary",
+        iconBg: "bg-primary/10",
+        progress: 80,
+        progressColor: "bg-primary",
+    },
+];
+
+function StatCard({ stat }) {
+    return (
+        <div className="card border border-base-300/80 bg-base-100 shadow-sm transition-shadow duration-200 hover:shadow-md">
+            <div className="card-body gap-4 p-4 tablet:p-5">
+                <div className="flex items-center justify-between gap-3">
+                    <div
+                        className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color}`}
+                    >
+                        <Icon name={stat.icon} size={23} />
+                    </div>
+                </div>
+
+                <div>
+                    <p className="text-sm font-medium text-base-content/65">
+                        {stat.title}
+                    </p>
+                    <p className="mt-1 text-3xl font-bold tracking-tight text-base-content">
+                        {stat.value}
+                    </p>
+                    <p className="mt-1 text-xs text-base-content/55">
+                        {stat.subtitle}
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default function Dashboard() {
     const { setBreadcrumbItems } = useBreadcrumbStore()
     useEffect(() => {
         setBreadcrumbItems([
@@ -10,172 +92,63 @@ function Overview() {
     }, [])
 
     return (
-        <div className="space-y-8">
-            {/* Header / Hero Banner with Primary Colors */}
-            <div className="bg-primary text-primary-content rounded-2xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors">
-                <div>
-                    <span className="badge badge-secondary font-semibold uppercase tracking-wider mb-2">
-                        Theme Colors Configured
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-bold">
-                        TeamFlow Overview
-                    </h2>
-                    <p className="text-primary-content/80 mt-1 max-w-xl text-sm sm:text-base">
-                        Colors are seamlessly synchronized across light and dark modes for both standard Tailwind utility classes and DaisyUI components.
-                    </p>
-                </div>
-            </div>
+        <main className="min-h-full space-y-5 bg-base-200/50 p-3 mobile:p-4 tablet:space-y-6 tablet:p-6 desktop:p-7 large-desktop:p-8">
+            {/* Welcome header */}
+            <section className="relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-r from-secondary/45 via-base-100 to-primary/10 p-5 tablet:p-7 desktop:p-8">
+                <div
+                    className="pointer-events-none absolute -right-10 -top-16 size-52 rounded-full border-[28px] border-primary/5"
+                    aria-hidden="true"
+                />
 
-            {/* Section 1: Standard Utility Classes Swatch Grid */}
-            <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="text-lg font-bold text-base-content">
-                            Regular Tailwind CSS Utility Classes
-                        </h3>
-                        <p className="text-xs sm:text-sm text-base-content/70">
-                            Using <code className="text-primary font-mono font-semibold">bg-primary</code>, <code className="text-secondary font-mono font-semibold">bg-secondary</code>, <code className="text-accent font-mono font-semibold">bg-accent</code>, <code className="text-base-content font-mono font-semibold">bg-base-100</code>, etc.
+                <div
+                    className="pointer-events-none absolute -bottom-20 right-1/4 size-40 rounded-full bg-secondary/20 blur-2xl"
+                    aria-hidden="true"
+                />
+
+                <div className="relative flex flex-col gap-5 tablet:flex-row tablet:items-center tablet:justify-between">
+                    <div className="min-w-0">
+                        <p className="mb-2 text-sm font-medium text-primary">
+                            YOUR WORKSPACE
                         </p>
-                    </div>
-                </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    {/* Primary */}
-                    <div className="bg-primary text-primary-content p-4 rounded-xl shadow-xs flex flex-col justify-between h-28 border border-primary/20 transition-colors">
-                        <span className="text-xs font-bold uppercase tracking-wider">Primary</span>
-                        <div className="text-xs opacity-80 font-mono">bg-primary</div>
-                    </div>
+                        <h1 className="text-2xl font-bold tracking-tight text-base-content tablet:text-3xl">
+                            Good morning, Salem!
+                        </h1>
 
-                    {/* Secondary */}
-                    <div className="bg-secondary text-secondary-content p-4 rounded-xl shadow-xs flex flex-col justify-between h-28 border border-secondary/20 transition-colors">
-                        <span className="text-xs font-bold uppercase tracking-wider">Secondary</span>
-                        <div className="text-xs opacity-80 font-mono">bg-secondary</div>
-                    </div>
-
-                    {/* Accent */}
-                    <div className="bg-accent text-accent-content p-4 rounded-xl shadow-xs flex flex-col justify-between h-28 border border-accent/20 transition-colors">
-                        <span className="text-xs font-bold uppercase tracking-wider">Accent</span>
-                        <div className="text-xs opacity-80 font-mono">bg-accent</div>
-                    </div>
-
-                    {/* Neutral */}
-                    <div className="bg-neutral text-neutral-content p-4 rounded-xl shadow-xs flex flex-col justify-between h-28 border border-neutral/20 transition-colors">
-                        <span className="text-xs font-bold uppercase tracking-wider">Neutral</span>
-                        <div className="text-xs opacity-80 font-mono">bg-neutral</div>
-                    </div>
-
-                    {/* Base 100 */}
-                    <div className="bg-base-100 text-base-content p-4 rounded-xl shadow-xs flex flex-col justify-between h-28 border border-base-300 transition-colors">
-                        <span className="text-xs font-bold uppercase tracking-wider">Base 100</span>
-                        <div className="text-xs text-base-content/70 font-mono">bg-base-100</div>
-                    </div>
-
-                    {/* Base 300 */}
-                    <div className="bg-base-300 text-base-content p-4 rounded-xl shadow-xs flex flex-col justify-between h-28 border border-base-300 transition-colors">
-                        <span className="text-xs font-bold uppercase tracking-wider">Base 300</span>
-                        <div className="text-xs text-base-content/70 font-mono">bg-base-300</div>
-                    </div>
-                </div>
-
-                {/* State colors */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                    <div className="bg-success text-success-content p-3.5 rounded-xl text-xs font-medium flex items-center justify-between shadow-xs">
-                        <span>Success Status</span>
-                        <span className="font-mono text-[10px] opacity-80">bg-success</span>
-                    </div>
-                    <div className="bg-warning text-warning-content p-3.5 rounded-xl text-xs font-medium flex items-center justify-between shadow-xs">
-                        <span>Warning Status</span>
-                        <span className="font-mono text-[10px] opacity-80">bg-warning</span>
-                    </div>
-                    <div className="bg-error text-error-content p-3.5 rounded-xl text-xs font-medium flex items-center justify-between shadow-xs">
-                        <span>Error Status</span>
-                        <span className="font-mono text-[10px] opacity-80">bg-error</span>
-                    </div>
-                    <div className="bg-info text-info-content p-3.5 rounded-xl text-xs font-medium flex items-center justify-between shadow-xs">
-                        <span>Info Status</span>
-                        <span className="font-mono text-[10px] opacity-80">bg-info</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Section 2: DaisyUI Components Showcase */}
-            <div className="space-y-4">
-                <div>
-                    <h3 className="text-lg font-bold text-base-content">
-                        DaisyUI Component Integration
-                    </h3>
-                    <p className="text-xs sm:text-sm text-base-content/70">
-                        Components styled with DaisyUI semantic classes like <code className="text-primary font-mono font-semibold">btn-primary</code>, <code className="text-primary font-mono font-semibold">card</code>, <code className="text-primary font-mono font-semibold">badge</code>, <code className="text-primary font-mono font-semibold">alert</code>.
-                    </p>
-                </div>
-
-                {/* Buttons and Badges */}
-                <div className="card bg-base-100 border border-base-300 p-6 shadow-xs space-y-5">
-                    <h4 className="text-sm font-semibold text-base-content uppercase tracking-wider">
-                        Buttons & Badges
-                    </h4>
-                    <div className="flex flex-wrap gap-3 items-center">
-                        <button className="btn btn-primary">btn-primary</button>
-                        <button className="btn btn-secondary">btn-secondary</button>
-                        <button className="btn btn-accent">btn-accent</button>
-                        <button className="btn btn-neutral">btn-neutral</button>
-                        <button className="btn btn-outline btn-primary">Outline Primary</button>
-                        <button className="btn btn-ghost">Ghost</button>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 items-center pt-2">
-                        <span className="badge badge-primary">Primary Badge</span>
-                        <span className="badge badge-secondary">Secondary Badge</span>
-                        <span className="badge badge-accent">Accent Badge</span>
-                        <span className="badge badge-neutral">Neutral Badge</span>
-                        <span className="badge badge-info">Info</span>
-                        <span className="badge badge-success">Success</span>
-                        <span className="badge badge-warning">Warning</span>
-                        <span className="badge badge-error">Error</span>
-                    </div>
-                </div>
-
-                {/* Cards and Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="card bg-base-100 border border-base-300 p-5 shadow-xs space-y-2">
-                        <span className="text-xs text-base-content/60 uppercase font-semibold">Total Projects</span>
-                        <div className="text-3xl font-extrabold text-primary">24 Active</div>
-                        <p className="text-xs text-success flex items-center gap-1 font-medium">
-                            ↑ 12% increase from last month
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-base-content/65 tablet:text-base">
+                            Here's an overview of your workspace. Keep your
+                            team aligned and your projects moving forward.
                         </p>
                     </div>
 
-                    <div className="card bg-base-100 border border-base-300 p-5 shadow-xs space-y-2">
-                        <span className="text-xs text-base-content/60 uppercase font-semibold">Team Velocity</span>
-                        <div className="text-3xl font-extrabold text-secondary">98.4%</div>
-                        <p className="text-xs text-base-content/70 font-medium">
-                            48 completed sprints
-                        </p>
-                    </div>
-
-                    <div className="card bg-base-100 border border-base-300 p-5 shadow-xs space-y-2">
-                        <span className="text-xs text-base-content/60 uppercase font-semibold">Pending Review</span>
-                        <div className="text-3xl font-extrabold text-accent">7 Tasks</div>
-                        <p className="text-xs text-warning flex items-center gap-1 font-medium">
-                            ● 3 urgent reviews needed
-                        </p>
-                    </div>
+                    <GenericBtn
+                        text="Create Task"
+                        icon={<Icon name="plus" size={19} />}
+                        iconClass="order-first"
+                        className="btn-primary w-full shrink-0 tablet:w-auto"
+                        to="/dashboard/tasks?createtask=true"
+                    />
                 </div>
+            </section>
 
-                {/* Alerts */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="alert alert-info shadow-xs text-xs sm:text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span>DaisyUI Info Alert: Light and dark palettes adjusted.</span>
-                    </div>
-                    <div className="alert alert-success shadow-xs text-xs sm:text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <span>DaisyUI Success Alert: Contrast ratios verified!</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {/* Statistics */}
+            <section
+                className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-4"
+                aria-label="Workspace statistics"
+            >
+                {stats.map((stat) => (
+                    <StatCard key={stat.title} stat={stat} />
+                ))}
+            </section>
+
+            {/* Analytics */}
+            <section className="grid grid-cols-1 gap-5 desktop:grid-cols-2">
+                <TaskStatusChart />
+                <WeeklyActivityChart />
+            </section>
+
+            {/* Recent tasks */}
+            <RecentTasks />
+        </main>
     );
 }
-
-export default Overview;
