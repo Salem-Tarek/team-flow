@@ -1,16 +1,6 @@
 import GenericChart from '~/components/GenericChart/index.jsx'
 
-const weeklyActivity = [
-    { day: "Mon", value: 45 },
-    { day: "Tue", value: 72 },
-    { day: "Wed", value: 55 },
-    { day: "Thu", value: 88 },
-    { day: "Fri", value: 65 },
-    { day: "Sat", value: 35 },
-    { day: "Sun", value: 48 },
-];
-
-export default function WeeklyActivityChart() {
+export default function WeeklyActivityChart({ weeklyActivity = [] }) {
     return (
         <section className="card border border-base-300/80 bg-base-100 shadow-sm">
             <div className="card-body gap-5 p-5 tablet:p-6">

@@ -6,85 +6,16 @@ import Icon from '../components/Icon.jsx'
 import TaskStatusChart from '../components/TaskStatusChart.jsx'
 import WeeklyActivityChart from '../components/WeeklyActivityChart.jsx'
 import RecentTasks from '../components/RecentTasks.jsx'
-
-// Static data — replace with your MSW-backed API response later.
-const stats = [
-    {
-        title: "Total Projects",
-        value: 12,
-        subtitle: "8 active projects",
-        change: "+12%",
-        icon: "folder",
-        color: "text-primary",
-        iconBg: "bg-primary/10",
-        progress: 72,
-        progressColor: "bg-primary",
-    },
-    {
-        title: "Total Tasks",
-        value: 86,
-        subtitle: "24 in progress",
-        change: "+8%",
-        icon: "tasks",
-        color: "text-primary",
-        iconBg: "bg-primary/10",
-        progress: 64,
-        progressColor: "bg-primary",
-    },
-    {
-        title: "Completed Tasks",
-        value: 54,
-        subtitle: "63% completion rate",
-        change: "+18%",
-        icon: "check",
-        color: "text-success",
-        iconBg: "bg-success/10",
-        progress: 63,
-        progressColor: "bg-success",
-    },
-    {
-        title: "Team Members",
-        value: 18,
-        subtitle: "Across 4 teams",
-        change: "+5%",
-        icon: "users",
-        color: "text-primary",
-        iconBg: "bg-primary/10",
-        progress: 80,
-        progressColor: "bg-primary",
-    },
-];
-
-function StatCard({ stat }) {
-    return (
-        <div className="card border border-base-300/80 bg-base-100 shadow-sm transition-shadow duration-200 hover:shadow-md">
-            <div className="card-body gap-4 p-4 tablet:p-5">
-                <div className="flex items-center justify-between gap-3">
-                    <div
-                        className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${stat.iconBg} ${stat.color}`}
-                    >
-                        <Icon name={stat.icon} size={23} />
-                    </div>
-                </div>
-
-                <div>
-                    <p className="text-sm font-medium text-base-content/65">
-                        {stat.title}
-                    </p>
-                    <p className="mt-1 text-3xl font-bold tracking-tight text-base-content">
-                        {stat.value}
-                    </p>
-                    <p className="mt-1 text-xs text-base-content/55">
-                        {stat.subtitle}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-}
+import StatCard from '../components/StatCard.jsx'
+import { useDashboard } from '../hooks/index.js'
 
 export default function Dashboard() {
     const { setBreadcrumbItems } = useBreadcrumbStore()
+    const { data: dashboardData, isFetching: isLoading, refetch
+    } = useDashboard();
+
+    const { stats = [], taskStatuses = [], weeklyActivity = [], recentTasks = [] } = dashboardData?.data || {};
+
     useEffect(() => {
         setBreadcrumbItems([
             { to: "", label: "Dashboard" },
@@ -143,12 +74,12 @@ export default function Dashboard() {
 
             {/* Analytics */}
             <section className="grid grid-cols-1 gap-5 desktop:grid-cols-2">
-                <TaskStatusChart />
-                <WeeklyActivityChart />
+                <TaskStatusChart taskStatuses={taskStatuses} />
+                <WeeklyActivityChart weeklyActivity={weeklyActivity} />
             </section>
 
             {/* Recent tasks */}
-            <RecentTasks />
+            <RecentTasks recentTasks={recentTasks} />
         </main>
     );
 }

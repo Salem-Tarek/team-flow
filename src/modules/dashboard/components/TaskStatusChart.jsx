@@ -1,13 +1,6 @@
 import GenericChart from '~/components/GenericChart/index.jsx'
 
-const taskStatuses = [
-    { label: "To Do", count: 28, color: "#457b9d" },
-    { label: "In Progress", count: 33, color: "#e09f3e" },
-    { label: "In Review", count: 15, color: "#47982c" },
-    { label: "Completed", count: 10, color: "#a8dadc" },
-];
-
-export default function TaskStatusChart() {
+export default function TaskStatusChart({ taskStatuses = [] }) {
     const total = taskStatuses.reduce(
         (sum, status) => sum + status.count,
         0

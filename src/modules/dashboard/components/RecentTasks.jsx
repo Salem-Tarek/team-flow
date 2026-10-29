@@ -1,49 +1,6 @@
 import GenericBtn from "~/components/GenericBtn/index.jsx";
 import Icon from "./Icon.jsx"
 
-const recentTasks = [
-    {
-        id: 1,
-        title: "Design landing page",
-        project: "Website Redesign",
-        assignee: "Ahmed Hassan",
-        initials: "AH",
-        priority: "High",
-        status: "In Progress",
-        dueDate: "Oct 30, 2026",
-    },
-    {
-        id: 2,
-        title: "Implement API integration",
-        project: "TeamFlow Dashboard",
-        assignee: "Sara Mohamed",
-        initials: "SM",
-        priority: "Urgent",
-        status: "In Review",
-        dueDate: "Oct 31, 2026",
-    },
-    {
-        id: 3,
-        title: "Create user management",
-        project: "Admin Portal",
-        assignee: "Omar Ali",
-        initials: "OA",
-        priority: "Medium",
-        status: "To Do",
-        dueDate: "Nov 02, 2026",
-    },
-    {
-        id: 4,
-        title: "Update project documentation",
-        project: "TeamFlow Dashboard",
-        assignee: "Mariam Adel",
-        initials: "MA",
-        priority: "Low",
-        status: "Completed",
-        dueDate: "Oct 27, 2026",
-    },
-];
-
 const statusStyles = {
     "To Do": "bg-base-200 text-base-content",
     "In Progress": "bg-info/10 text-info",
@@ -58,7 +15,7 @@ const priorityStyles = {
     Urgent: "text-error",
 };
 
-export default function RecentTasks() {
+export default function RecentTasks({ recentTasks = [] }) {
     return (
         <section className="card border border-base-300/80 bg-base-100 shadow-sm">
             <div className="card-body gap-4 p-4 tablet:p-6">
