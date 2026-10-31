@@ -30,6 +30,7 @@ function Login() {
             fields={loginFields}
             onSubmit={(data, { reset }) => handleSubmit(data, { reset })}
             isPending={isPending}
+            submitLabel="Login"
         />
         // <form className="space-y-4" onSubmit={handleSubmit}>
         //     <div>
