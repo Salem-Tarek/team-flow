@@ -2,12 +2,12 @@
 import GenericBtn from "~/components/GenericBtn/index.jsx";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useEffect } from 'react'
-import Icon from '../components/Icon.jsx'
 import TaskStatusChart from '../components/TaskStatusChart.jsx'
 import WeeklyActivityChart from '../components/WeeklyActivityChart.jsx'
 import RecentTasks from '../components/RecentTasks.jsx'
 import StatCard from '../components/StatCard.jsx'
 import { useDashboard } from '../hooks/index.js'
+import { Plus } from 'lucide-react'
 
 export default function Dashboard() {
     const { setBreadcrumbItems } = useBreadcrumbStore()
@@ -54,7 +54,7 @@ export default function Dashboard() {
 
                     <GenericBtn
                         text="Create Task"
-                        icon={<Icon name="plus" size={19} />}
+                        icon={<Plus size={19} />}
                         iconClass="order-first"
                         className="btn-primary w-full shrink-0 tablet:w-auto"
                         to="/dashboard/tasks?createtask=true"

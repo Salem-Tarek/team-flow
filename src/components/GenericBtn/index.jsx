@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function GenericBtn({ text = "Default", isDisabled = false, isLoading = false, icon = null, className = "", children, onClick, iconClass = '', textClass = '', to = null, ...rest }) {
+function GenericBtn({ text = "", isDisabled = false, isLoading = false, icon = null, className = "", children, onClick, iconClass = '', textClass = '', to = null, ...rest }) {
     const navigate = useNavigate();
     const handleClickBtn = () => {
         if (to) {

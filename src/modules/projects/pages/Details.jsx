@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router";
 import { useProject } from "../hooks/index.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useEffect } from 'react'
+import { SquarePen, ClipboardList, CircleDollarSign, Calendar } from 'lucide-react'
+import useAuthStore from "~/modules/auth/stores/authStore.js";
 
 const statusColor = {
     planning: "badge-info",
@@ -107,6 +109,9 @@ function ProjectDetails() {
     const { id } = useParams();
     const { data: projectData, isLoading } = useProject(id);
     const { setBreadcrumbItems } = useBreadcrumbStore()
+
+    const { isAdmin } = useAuthStore();
+
     useEffect(() => {
         if (!projectData) return;
         setBreadcrumbItems([
@@ -166,32 +171,15 @@ function ProjectDetails() {
                     </div>
                 </div>
 
-                <Link
-                    to={`/dashboard/projects/edit/${projectData.id}`}
-                    className="btn btn-primary w-full sm:w-auto"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.8}
-                        stroke="currentColor"
-                        className="size-5"
-                        aria-hidden="true"
+                {isAdmin && (
+                    <Link
+                        to={`/dashboard/projects/edit/${projectData.id}`}
+                        className="btn btn-primary w-full sm:w-auto"
                     >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13l-2.685.896.896-2.685a4.5 4.5 0 0 1 1.13-1.897l8.836-8.836Z"
-                        />
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19.5 7.125 16.875 4.5M18 13.5V19.125A1.875 1.875 0 0 1 16.125 21H4.875A1.875 1.875 0 0 1 3 19.125V7.875A1.875 1.875 0 0 1 4.875 6H10.5"
-                        />
-                    </svg>
-                    Edit Project
-                </Link>
+                        <SquarePen size={18} />
+                        Edit Project
+                    </Link>
+                )}
             </div>
 
             {/* Progress */}
@@ -226,21 +214,7 @@ function ProjectDetails() {
                 <div className="stat rounded-box border border-base-300 bg-base-100 shadow-sm">
                     <div className="stat-figure text-primary">
                         <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.8}
-                                stroke="currentColor"
-                                className="size-6"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M9 5.25H6.75A2.25 2.25 0 0 0 4.5 7.5v12A2.25 2.25 0 0 0 6.75 21.75h10.5A2.25 2.25 0 0 0 19.5 19.5v-12a2.25 2.25 0 0 0-2.25-2.25H15M9 5.25a2.25 2.25 0 0 1 2.25-2.25h1.5A2.25 2.25 0 0 1 15 5.25M9 5.25A2.25 2.25 0 0 0 11.25 7.5h1.5A2.25 2.25 0 0 0 15 5.25M8.25 12h7.5M8.25 16.5h7.5"
-                                />
-                            </svg>
+                            <ClipboardList size={24} />
                         </div>
                     </div>
                     <div className="stat-title">Tasks</div>
@@ -253,21 +227,7 @@ function ProjectDetails() {
                 <div className="stat rounded-box border border-base-300 bg-base-100 shadow-sm">
                     <div className="stat-figure text-secondary">
                         <div className="flex size-11 items-center justify-center rounded-xl bg-secondary/15">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.8}
-                                stroke="currentColor"
-                                className="size-6"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12 8c-2.21 0-4 .895-4 2s1.79 2 4 2 4 .895 4 2-1.79 2-4 2m0-8c1.11 0 2.08.31 2.75.8M12 8V6m0 2v10m0 0v2m0-2c-1.11 0-2.08-.31-2.75-.8M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                />
-                            </svg>
+                            <CircleDollarSign size={24} />
                         </div>
                     </div>
                     <div className="stat-title">Budget</div>
@@ -280,21 +240,7 @@ function ProjectDetails() {
                 <div className="stat rounded-box border border-base-300 bg-base-100 shadow-sm">
                     <div className="stat-figure text-accent">
                         <div className="flex size-11 items-center justify-center rounded-xl bg-accent/10">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.8}
-                                stroke="currentColor"
-                                className="size-6"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M6.75 3v2.25M17.25 3v2.25M3.75 8.25h16.5M5.25 4.5h13.5A1.5 1.5 0 0 1 20.25 6v13.5a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V6a1.5 1.5 0 0 1 1.5-1.5Z"
-                                />
-                            </svg>
+                            <Calendar size={24} />
                         </div>
                     </div>
                     <div className="stat-title">Due Date</div>

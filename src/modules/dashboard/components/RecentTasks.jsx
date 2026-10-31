@@ -1,5 +1,5 @@
 import GenericBtn from "~/components/GenericBtn/index.jsx";
-import Icon from "./Icon.jsx"
+import { Calendar, MoveRight } from "lucide-react";
 
 const statusStyles = {
     "To Do": "bg-base-200 text-base-content",
@@ -31,7 +31,7 @@ export default function RecentTasks({ recentTasks = [] }) {
 
                     <GenericBtn
                         text="View all"
-                        icon={<Icon name="arrow" size={16} />}
+                        icon={<MoveRight size={16} />}
                         className="btn-ghost btn-sm text-primary"
                         to="/dashboard/tasks"
                     />
@@ -68,7 +68,7 @@ export default function RecentTasks({ recentTasks = [] }) {
                                 </span>
 
                                 <div className="flex items-center gap-1.5 text-xs text-base-content/60">
-                                    <Icon name="calendar" size={14} />
+                                    <Calendar size={14} />
                                     {task.dueDate}
                                 </div>
                             </div>
