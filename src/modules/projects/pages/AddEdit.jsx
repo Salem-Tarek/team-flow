@@ -52,7 +52,7 @@ function ProjectsAddEdit() {
                 navigate('/dashboard/projects')
             },
             onError: (error) => {
-                addErrorNotification(error.message)
+                addErrorNotification(error?.response?.data?.message || error?.message)
             }
         }
         const submitData = { ...data, teamName, ownerName, progress: Math.floor(Math.random() * 100), taskCount: Math.floor(Math.random() * 10) };

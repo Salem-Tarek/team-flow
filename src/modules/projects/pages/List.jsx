@@ -53,7 +53,7 @@ function ProjectsList() {
                     addSuccessNotification(res.message);
                 },
                 onError: (error) => {
-                    addErrorNotification(error.message)
+                    addErrorNotification(error?.response?.data?.message || error?.message)
                 }
             })
         }
@@ -71,7 +71,7 @@ function ProjectsList() {
                 document.getElementById("addModal").close()
             },
             onError: (error) => {
-                addErrorNotification(error.message)
+                addErrorNotification(error?.response?.data?.message || error?.message)
             }
         })
     }

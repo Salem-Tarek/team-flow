@@ -81,7 +81,7 @@ function TeamsList() {
                     addSuccessNotification(res.message)
                 },
                 onError: (error) => {
-                    addErrorNotification(error.message)
+                    addErrorNotification(error?.response?.data?.message || error?.message)
                 }
             })
         }
@@ -94,7 +94,7 @@ function TeamsList() {
                 reset();
             },
             onError: (error) => {
-                addErrorNotification(error.message)
+                addErrorNotification(error?.response?.data?.message || error?.message)
             },
             onSettled: () => {
                 document.getElementById("addModal").close()
