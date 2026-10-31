@@ -8,11 +8,13 @@ import RecentTasks from '../components/RecentTasks.jsx'
 import StatCard from '../components/StatCard.jsx'
 import { useDashboard } from '../hooks/index.js'
 import { Plus } from 'lucide-react'
+import useAuthStore from "~/modules/auth/stores/authStore.js";
 
 export default function Dashboard() {
     const { setBreadcrumbItems } = useBreadcrumbStore()
     const { data: dashboardData, isFetching: isLoading, refetch
     } = useDashboard();
+    const { isAdmin } = useAuthStore();
 
     const { stats = [], taskStatuses = [], weeklyActivity = [], recentTasks = [] } = dashboardData?.data || {};
 
@@ -52,13 +54,15 @@ export default function Dashboard() {
                         </p>
                     </div>
 
-                    <GenericBtn
-                        text="Create Task"
-                        icon={<Plus size={19} />}
-                        iconClass="order-first"
-                        className="btn-primary w-full shrink-0 tablet:w-auto"
-                        to="/dashboard/tasks?createtask=true"
-                    />
+                    {isAdmin && (
+                        <GenericBtn
+                            text="Create Task"
+                            icon={<Plus size={19} />}
+                            iconClass="order-first"
+                            className="btn-primary w-full shrink-0 tablet:w-auto"
+                            to="/dashboard/tasks?createtask=true"
+                        />
+                    )}
                 </div>
             </section>
 

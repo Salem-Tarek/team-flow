@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import { initialTeams, initialUsers, projects, initialTasks } from '~/app/mocks/index.js'
 
 /**
  * Safely retrieves parsed array data from localStorage.
@@ -11,6 +12,19 @@ function getFromLocalStorage(key) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed)) {
                     return parsed;
+                }
+            } else {
+                switch (key) {
+                    case 'tasks':
+                        return initialTasks;
+                    case 'projects':
+                        return projects;
+                    case 'teams':
+                        return initialTeams;
+                    case 'users':
+                        return initialUsers;
+                    default:
+                        return [];
                 }
             }
         }
@@ -80,10 +94,10 @@ function formatDate(dateStr) {
  * Computes dashboard statistics directly from real localStorage data.
  */
 function getComputedStats() {
-    const tasks = getFromLocalStorage('tasks');
-    const projects = getFromLocalStorage('projects');
-    const teams = getFromLocalStorage('teams');
-    const users = getFromLocalStorage('users');
+    const tasks = getFromLocalStorage('tasks') || initialTasks;
+    const projects = getFromLocalStorage('projects') || projects;
+    const teams = getFromLocalStorage('teams') || initialTeams;
+    const users = getFromLocalStorage('users') || initialUsers;
 
     // Projects metrics
     const totalProjects = projects.length;

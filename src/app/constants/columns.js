@@ -38,7 +38,11 @@ export const teamsColumns = [
         label: "Status",
         htmlStrcuture: ({ value }) => `<span class="capitalize badge badge-${value === "active" ? "success" : "error"}">${value}</span>`
     },
-    { key: "createdAt", label: "Created" },
+    {
+        key: "createdAt",
+        label: "Created",
+        htmlStrcuture: ({ value }) => dayjs(value).format("DD-MM-YYYY")
+    },
     { key: "actions", label: "", actions: ["edit", "delete"] },
 ];
 

@@ -306,7 +306,7 @@ export const taskFields = (projects = [], users = []) => [
             { value: "todo", label: "To Do" },
             { value: "in_progress", label: "In Progress" },
             { value: "in_review", label: "In Review" },
-            { value: "done", label: "Done" },
+            { value: "completed", label: "Done" },
         ],
         rules: z.string().min(1, "Status is required"),
     },
@@ -321,7 +321,17 @@ export const taskFields = (projects = [], users = []) => [
         name: "estimateHours",
         label: "Estimate (hours)",
         placeholder: "0",
-        rules: z.string().refine((v) => v === "" || (!isNaN(Number(v)) && Number(v) >= 0), "Estimate must be a positive number"),
+        rules: z.union([z.string(), z.number()])
+            .nullish()
+            .refine((v) => {
+                if (v === "" || v === null || v === undefined) return true;
+                if (typeof v === "number") {
+                    return !isNaN(v) && isFinite(v) && v >= 0;
+                }
+                const trimmed = String(v).trim();
+                if (trimmed === "") return true;
+                return /^(\d+(\.\d+)?|\.\d+)$/.test(trimmed) && Number(trimmed) >= 0;
+            }, "Estimate must be a positive number"),
     },
     {
         name: "description",

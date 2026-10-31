@@ -82,6 +82,7 @@ function DashboardLayout() {
         queryClient.invalidateQueries({ queryKey: ["projects"] });
         queryClient.invalidateQueries({ queryKey: ["users"] });
         queryClient.invalidateQueries({ queryKey: ["teams"] });
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     }
 
     const handleLogout = () => {

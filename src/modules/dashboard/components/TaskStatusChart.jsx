@@ -11,7 +11,7 @@ export default function TaskStatusChart({ taskStatuses = [] }) {
     const gradient = taskStatuses
         .map((status) => {
             const start = currentAngle;
-            const percentage = (status.count / total) * 100;
+            const percentage = total > 0 ? (status.count / total) * 100 : 0;
 
             currentAngle += percentage;
 
@@ -76,7 +76,7 @@ export default function TaskStatusChart({ taskStatuses = [] }) {
                                     </span>
                                     <span className="ml-2 text-xs text-base-content/55">
                                         {Math.round(
-                                            (status.count / total) * 100
+                                            total > 0 ? (status.count / total) * 100 : 0
                                         )}%
                                     </span>
                                 </div>
