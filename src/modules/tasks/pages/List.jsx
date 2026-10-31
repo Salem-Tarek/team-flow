@@ -9,6 +9,7 @@ import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useSearchParams } from "react-router";
+import { showCloseAddEditModal } from '~/helpers/index.js'
 
 function TasksList() {
     const [pagination, setPagination] = useState({})
@@ -55,14 +56,14 @@ function TasksList() {
         setMode('add')
         setSelectedTask({})
         setFormKey((k) => k + 1);
-        document.getElementById("addModal").showModal()
+        showCloseAddEditModal()
     }
 
     function onEditClick(item) {
         setSelectedTask(item)
         setMode('edit')
         setFormKey((k) => k + 1);
-        document.getElementById("addModal").showModal()
+        showCloseAddEditModal()
     }
 
     async function onDeleteClick(item) {
@@ -108,7 +109,7 @@ function TasksList() {
                 addErrorNotification(error?.response?.data?.message || error?.message)
             },
             onSettled: () => {
-                document.getElementById("addModal").close()
+                showCloseAddEditModal(true)
             }
         }
 

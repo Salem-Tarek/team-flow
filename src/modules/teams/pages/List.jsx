@@ -7,6 +7,7 @@ import { useUsers } from "~/modules/users/hooks/index.js";
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
+import { showCloseAddEditModal } from '~/helpers/index.js'
 
 function TeamsList() {
     const [pagination, setPagination] = useState({})
@@ -55,14 +56,14 @@ function TeamsList() {
         setMode('add')
         setSelectedTeam({})
         setFormKey((k) => k + 1);
-        document.getElementById("addModal").showModal()
+        showCloseAddEditModal()
     }
 
     function onEditClick(item) {
         setSelectedTeam(item)
         setMode('edit')
         setFormKey((k) => k + 1);
-        document.getElementById("addModal").showModal()
+        showCloseAddEditModal()
     }
 
     async function onDeleteClick(item) {
@@ -97,7 +98,7 @@ function TeamsList() {
                 addErrorNotification(error?.response?.data?.message || error?.message)
             },
             onSettled: () => {
-                document.getElementById("addModal").close()
+                showCloseAddEditModal(true)
             }
         }
         if (mode === 'add') {

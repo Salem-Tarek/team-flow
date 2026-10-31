@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useConfirmStore } from "~/stores/confirmStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
+import { showCloseAddEditModal } from '~/helpers/index.js'
 
 function ProjectsList() {
     const [pagination, setPagination] = useState({})
@@ -68,7 +69,7 @@ function ProjectsList() {
             onSuccess: (res) => {
                 addSuccessNotification(res.message);
                 reset();
-                document.getElementById("addModal").close()
+                showCloseAddEditModal(true)
             },
             onError: (error) => {
                 addErrorNotification(error?.response?.data?.message || error?.message)
