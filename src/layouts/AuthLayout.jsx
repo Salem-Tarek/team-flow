@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import ThemeToggle from "~/components/ThemeToggle";
 
 function AuthLayout() {
     return (
@@ -13,6 +14,9 @@ function AuthLayout() {
                 />
             </div>
             <div className="w-full flex flex-col justify-center items-center p-8 bg-base-100 relative">
+                <div className="fixed top-4 end-4">
+                    <ThemeToggle />
+                </div>
                 <div className="w-full max-w-md">
                     <h2 className="text-2xl font-bold text-base-content mb-6 text-center">
                         Login
