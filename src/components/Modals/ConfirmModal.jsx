@@ -1,9 +1,9 @@
 import GenericModal from './index.jsx'
 import GenericBtn from '~/components/GenericBtn/index.jsx'
-import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
 
 function ConfirmModal() {
-    const { answer, modalHeader, message, confirmBtnText, cancelBtnText } = useConfirmStore();
+    const { answer, modalHeader, message, confirmBtnText, cancelBtnText } = useConfirmContext();
     return (
         <GenericModal
             modalId="confirmModal"

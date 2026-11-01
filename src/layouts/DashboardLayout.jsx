@@ -6,7 +6,7 @@ import darkLogo from '@/assets/images/dark-logo.png'
 import miniDarkLogo from '@/assets/images/mini-dark-logo.png'
 import { NavLink } from "react-router-dom";
 import GenericBtn from "~/components/GenericBtn/index.jsx";
-import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,7 +19,7 @@ import { RefreshCcw, PanelLeftOpen, LayoutDashboard, Users, UserGroup, Folder, S
 function DashboardLayout() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const { confirm } = useConfirmStore();
+    const { confirm } = useConfirmContext();
     const { breadcrumbItems } = useBreadcrumbStore();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
     const { mutate: logout } = useLogout();
@@ -106,7 +106,7 @@ function DashboardLayout() {
             confirmBtnText: 'Reset',
             message:
                 <>
-                    Are you sure you want to reset <span className="text-error font-bold">All the TeamFlow data</span>?
+                    Are you sure you want to reset <span className="text-error font-bold">All the TeamFlow data</span> to be default values ?
                 </>,
         });
 

@@ -5,7 +5,7 @@ import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
 import { useMemo, useState, useEffect } from "react";
 import { taskFields as fields } from "~/app/constants/fields.js";
-import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useSearchParams } from "react-router";
@@ -34,7 +34,7 @@ function TasksList() {
     const [selectedTask, setSelectedTask] = useState({})
     const [mode, setMode] = useState('edit')
     const [formKey, setFormKey] = useState(0);
-    const { confirm } = useConfirmStore();
+    const { confirm } = useConfirmContext();
     const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 

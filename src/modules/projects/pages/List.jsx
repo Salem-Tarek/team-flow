@@ -3,7 +3,7 @@ import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.js";
 import { useNavigate } from "react-router";
 import { useState, useEffect } from 'react';
-import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
@@ -31,7 +31,7 @@ function ProjectsList() {
 
     const { mutate: deleteProject, isPending: isDeleting } = useDeleteProject();
     let navigate = useNavigate();
-    const { confirm } = useConfirmStore();
+    const { confirm } = useConfirmContext();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
     function onEditClick(item) {

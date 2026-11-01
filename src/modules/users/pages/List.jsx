@@ -4,14 +4,16 @@ import { usersColumns } from "~/app/constants/columns.js";
 import { usersFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo, useEffect } from 'react'
 import { useTeams } from "~/modules/teams/hooks/index.js";
-import { useConfirmStore } from "~/stores/confirmStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
+import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
 
 function UsersList() {
     const [pagination, setPagination] = useState({})
     const { setBreadcrumbItems } = useBreadcrumbStore()
+    const { confirm } = useConfirmContext();
+
     useEffect(() => {
         setBreadcrumbItems([
             { to: "/dashboard", label: "Dashboard" },
@@ -36,7 +38,6 @@ function UsersList() {
     const [selectedUser, setSelectedUser] = useState({})
     const [mode, setMode] = useState('edit')
     const [formKey, setFormKey] = useState(0);
-    const { confirm } = useConfirmStore();
     const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 

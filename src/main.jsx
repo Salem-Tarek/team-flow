@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './app/App.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ConfirmProvider } from '@/app/providers/ConfirmationProvider.jsx'
 
 const queryClient = new QueryClient()
 
@@ -23,7 +24,9 @@ enableMocking().then(() => {
   createRoot(document.getElementById('root')).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <ConfirmProvider>
+          <App />
+        </ConfirmProvider>
       </QueryClientProvider>
     </StrictMode>,
   )

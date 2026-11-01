@@ -4,7 +4,7 @@ import { teamsColumns } from "~/app/constants/columns.js";
 import { teamsFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo, useEffect } from "react";
 import { useUsers } from "~/modules/users/hooks/index.js";
-import { useConfirmStore } from "~/stores/confirmStore.js";
+import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
@@ -38,7 +38,7 @@ function TeamsList() {
     const [selectedTeam, setSelectedTeam] = useState({})
     const [mode, setMode] = useState('edit')
     const [formKey, setFormKey] = useState(0);
-    const { confirm } = useConfirmStore();
+    const { confirm } = useConfirmContext();
     const { mutate: deleteTeam, isPending: isDeleting } = useDeleteTeam();
     const { addSuccessNotification, addErrorNotification } = useNotificationsStore();
 
