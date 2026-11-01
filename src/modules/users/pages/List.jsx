@@ -7,7 +7,7 @@ import { useTeams } from "~/modules/teams/hooks/index.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
-import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
+import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 
 function UsersList() {
     const [pagination, setPagination] = useState({})

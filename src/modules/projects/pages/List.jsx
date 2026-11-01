@@ -3,7 +3,7 @@ import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.js";
 import { useNavigate } from "react-router";
 import { useState, useEffect } from 'react';
-import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
+import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'

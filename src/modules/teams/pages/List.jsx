@@ -4,7 +4,7 @@ import { teamsColumns } from "~/app/constants/columns.js";
 import { teamsFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo, useEffect } from "react";
 import { useUsers } from "~/modules/users/hooks/index.js";
-import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
+import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'

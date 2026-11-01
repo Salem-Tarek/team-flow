@@ -5,7 +5,7 @@ import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
 import { useMemo, useState, useEffect } from "react";
 import { taskFields as fields } from "~/app/constants/fields.js";
-import { useConfirmContext } from "~/app/providers/confirmationProvider.jsx";
+import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useSearchParams } from "react-router";
