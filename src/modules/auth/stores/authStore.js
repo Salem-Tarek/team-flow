@@ -10,6 +10,7 @@ const useAuthStore = create(
             refreshToken: null,
             isAdmin: null,
 
+            setUser: (user) => set({ user }),
             setSession: ({ user, accessToken, refreshToken }) =>
                 set({ user, accessToken, refreshToken, isAuthenticated: true, isAdmin: user?.role === "admin" }),
 

@@ -2,6 +2,7 @@ import { http, HttpResponse, delay } from 'msw'
 import { seedData as seedUsers, STORAGE_KEY as USERS_KEY } from '~/modules/users/mocks/index.js'
 
 const API = 'https://www.teamflow.com/api/auth'
+const BASE_URL_API = 'https://www.teamflow.com/api'
 
 const ACCESS_PREFIX = 'mock-access-'
 const REFRESH_PREFIX = 'mock-refresh-'
@@ -71,5 +72,45 @@ export const handlers = [
         }
 
         return HttpResponse.json({ data: publicUser(user) })
+    }),
+
+    // 4. Update user info
+    http.patch(`${BASE_URL_API}/update-info`, async ({ request }) => {
+        await delay(500)
+
+        const body = await request.json()
+        const users = loadUsers()
+        const userIndex = users.findIndex((u) => u.id === Number(body.id))
+
+        if (userIndex === -1) {
+            return HttpResponse.json(
+                { message: 'User not found' },
+                { status: 404 }
+            )
+        }
+
+        const updatedUser = {
+            ...users[userIndex],
+            ...body,
+            email: users[userIndex].email,
+        }
+        users[userIndex] = updatedUser
+
+        const teamflow_auth = JSON.parse(localStorage.getItem('teamflow_auth'));
+        const updatedState = {
+            ...teamflow_auth,
+            state: {
+                ...(teamflow_auth?.state || {}),
+                user: updatedUser
+            }
+        };
+
+        localStorage.setItem(USERS_KEY, JSON.stringify(users))
+        localStorage.setItem('teamflow_auth', JSON.stringify(updatedState))
+
+        return HttpResponse.json({
+            data: publicUser(updatedUser),
+            message: 'Your data has been updated successfully',
+        })
     }),
 ]

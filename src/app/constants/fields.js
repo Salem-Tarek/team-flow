@@ -360,3 +360,23 @@ export const loginFields = [
         rules: z.string().min(1, "Password is required"),
     },
 ];
+
+export const profileFields = [
+    {
+        name: "name",
+        label: "Name",
+        isRequired: true,
+        rules: z.string().min(2, "Name is too short")
+    },
+    {
+        name: "email",
+        label: "Email",
+        type: "email",
+        disabled: true
+    }, // can't be edited
+    {
+        name: "phone",
+        label: "Phone",
+        rules: z.string().min(11, " number is too short")
+    },
+];

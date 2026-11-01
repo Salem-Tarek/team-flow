@@ -13,6 +13,9 @@ import ProjectsList from "~/modules/projects/pages/List.jsx"
 import ProjectsAddEdit from "~/modules/projects/pages/AddEdit.jsx"
 import ProjectDetails from "~/modules/projects/pages/Details.jsx"
 import TasksList from "~/modules/tasks/pages/List.jsx"
+import Profile from "~/modules/profile/pages/Profile.jsx"
+
+// Guards
 import AuthGuard from "~/components/layout/guards/AuthGuard.jsx"
 import GuestGuard from "~/components/layout/guards/GuestGuard.jsx"
 import AdminGuard from "~/components/layout/guards/AdminGuard.jsx"
@@ -41,6 +44,7 @@ export default function AppRoutes() {
                             <Route path="projects/edit/:id" element={<ProjectsAddEdit />} />
                         </Route>
                         <Route path="tasks" element={<TasksList />} />
+                        <Route path="profile" element={<Profile />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />

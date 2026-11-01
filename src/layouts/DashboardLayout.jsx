@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import ThemeToggle from "~/components/ThemeToggle";
 import lightLogo from '@/assets/images/light-logo.png'
 import miniLightLogo from '@/assets/images/mini-light-logo.png'
@@ -135,7 +135,7 @@ function DashboardLayout() {
                             <details className="dropdown dropdown-end">
                                 <summary className="btn m-1">{user?.name || '-'}</summary>
                                 <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                    <li><span>Profile</span></li>
+                                    <li><Link to="/dashboard/profile">Profile</Link></li>
                                     {/* <li><a>Settings</a></li> */}
                                     <li onClick={handleLogout}><span>Logout</span></li>
                                 </ul>

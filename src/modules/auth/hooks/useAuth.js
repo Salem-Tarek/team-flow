@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "../stores/authStore";
-import { login, logout, getCurrentUser } from "../services/index";
+import { login, logout, getCurrentUser, updateCurrentUserData } from "../services/index";
 import { useNavigate } from "react-router-dom";
 
 export function useLogin() {
@@ -37,5 +37,18 @@ export function useGetCurrentUser() {
         queryKey: ["auth", "current-user"],
         queryFn: getCurrentUser,
         onSuccess: (res) => setSession(res.data),
+    });
+}
+
+export function useUpdateCurrentUser() {
+    const { setUser } = useAuthStore();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: updateCurrentUserData,
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({ queryKey: ['users'] })
+            setUser(res.data)
+        },
     });
 }

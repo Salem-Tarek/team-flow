@@ -14,3 +14,8 @@ export const getCurrentUser = () => {
     return axiosClient.get(`/auth/me`)
         .then((res) => res.data)
 }
+
+export const updateCurrentUserData = (data) => {
+    return axiosClient.patch(`/update-info`, data)
+        .then((res) => res.data)
+}
