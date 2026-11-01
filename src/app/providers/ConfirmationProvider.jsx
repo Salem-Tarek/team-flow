@@ -1,6 +1,6 @@
 import { useContext, createContext, useState, useEffect } from 'react'
 
-const confirmationContext = createContext(null)
+const ConfirmationContext = createContext(null)
 
 export function ConfirmProvider({ children }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -46,12 +46,12 @@ export function ConfirmProvider({ children }) {
     }, [isOpen, confirmModalData])
 
     return (
-        <confirmationContext.Provider value={{ ...confirmModalData, confirm, answer }}>
+        <ConfirmationContext.Provider value={{ ...confirmModalData, confirm, answer }}>
             {children}
-        </confirmationContext.Provider>
+        </ConfirmationContext.Provider>
     )
 }
 
 export function useConfirmContext() {
-    return useContext(confirmationContext);
+    return useContext(ConfirmationContext);
 }
