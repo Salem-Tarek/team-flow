@@ -106,7 +106,7 @@ function DashboardLayout() {
             confirmBtnText: 'Reset',
             message:
                 <>
-                    Are you sure you want to reset <span className="text-error font-bold">All the TeamFlow data</span> to be default values?
+                    Are you sure you want to reset <span className="text-error font-bold">All the TeamFlow data</span> to be default dummy data?
                 </>,
         });
 
