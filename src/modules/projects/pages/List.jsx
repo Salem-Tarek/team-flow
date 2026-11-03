@@ -2,11 +2,13 @@ import GenericListing from "~/components/GenericListing";
 import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.js";
 import { useNavigate } from "react-router";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
+
+const EMPTY_ARRAY = [];
 
 function ProjectsList() {
     const [pagination, setPagination] = useState({})
@@ -38,7 +40,7 @@ function ProjectsList() {
         navigate(`/dashboard/projects/edit/${item.id}`);
     }
 
-    async function onDeleteClick(item) {
+    const onDeleteClick = useCallback(async (item) => {
         const ok = await confirm({
             modalHeader: 'Delete Project',
             confirmBtnText: 'Delete',
@@ -58,13 +60,14 @@ function ProjectsList() {
                 }
             })
         }
-    }
+    }, [confirm, deleteProject, addSuccessNotification, addErrorNotification])
 
-    function onViewClick(item) {
+
+    const onViewClick = useCallback((item) => {
         navigate(`/dashboard/projects/${item.id}`);
-    }
+    }, [])
 
-    function onSubmitForm(data, { reset }) {
+    const onSubmitForm = useCallback((data, { reset }) => {
         createTeam(data, {
             onSuccess: (res) => {
                 addSuccessNotification(res.message);
@@ -75,22 +78,22 @@ function ProjectsList() {
                 addErrorNotification(error?.response?.data?.message || error?.message)
             }
         })
-    }
+    }, [])
 
-    function handlePageChange(newPage) {
+    const handlePageChange = useCallback((newPage) => {
         setPagination((prev) => ({
             ...prev,
             page: newPage,
         }))
-    }
+    }, [])
 
-    function handlePerPageChange(newLimit) {
+    const handlePerPageChange = useCallback((newLimit) => {
         setPagination((prev) => ({
             ...prev,
             limit: newLimit,
             page: 1,
         }))
-    }
+    }, [])
 
     return (
         <div>
@@ -98,7 +101,7 @@ function ProjectsList() {
                 title="Projects List"
                 addBtnText="Add Project"
                 columns={projectsColumns}
-                initialData={projectsData?.data || []}
+                initialData={projectsData?.data || EMPTY_ARRAY}
                 showCheckbox={true}
                 showActions={true}
                 onEditClick={(item) => onEditClick(item)}

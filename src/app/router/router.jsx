@@ -1,9 +1,11 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import AuthLayout from "~/layouts/AuthLayout";
 import DashboardLayout from "~/layouts/DashboardLayout";
 import Login from '~/modules/auth/pages/Login'
 import Overview from '~/modules/dashboard/pages/Overview'
 import Components from '~/modules/dashboard/pages/Components'
+import Test from '~/modules/dashboard/pages/Test'
 import NotFound from "~/components/NotFound";
 
 // Modules
@@ -35,6 +37,7 @@ export default function AppRoutes() {
                     <Route path="/dashboard" element={<DashboardLayout />}>
                         <Route index element={<Overview />} />
                         <Route path="components" element={<Components />} />
+                        <Route path="test" element={<Test />} />
                         <Route path="users" element={<UsersList />} />
                         <Route path="teams" element={<TeamsList />} />
                         <Route path="projects" element={<ProjectsList />} />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, memo } from "react"
 import { FormSelect } from "~/components/form/index.js"
 import parse from 'html-react-parser';
 import { Trash, Pencil, Eye, Ban } from "lucide-react"
@@ -20,6 +20,8 @@ function GenericTable({
   perPage = 10,
   onPerPageChange,
 }) {
+  console.log('Table Re-rendered')
+
   const [data, setData] = useState(initialData)
 
   const hasVisibleActions = showActions && columns.some((column) => {
@@ -284,4 +286,4 @@ function GenericTable({
   )
 }
 
-export default GenericTable
+export default memo(GenericTable)

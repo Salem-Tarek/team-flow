@@ -7,6 +7,11 @@ function FormField({ label, error, className = "", type = "text", ref, showPassw
 
     const isPassword = (type === "password" && showPasswordIcon);
 
+    let inputType = type;
+    if (isPassword) {
+        inputType = isPasswordVisible ? 'text' : 'password'
+    }
+
     return (
         <div className={className}>
             <label className="label mb-1">{label}</label>
@@ -14,11 +19,7 @@ function FormField({ label, error, className = "", type = "text", ref, showPassw
             <div className="relative">
                 <input
                     ref={ref}
-                    type={
-                        isPassword && !isPasswordVisible
-                            ? "password"
-                            : "text"
-                    }
+                    type={inputType}
                     className={`input w-full! ${isPassword ? "pr-10" : ""} ${error ? "input-error" : ""}`}
                     {...rest}
                 />

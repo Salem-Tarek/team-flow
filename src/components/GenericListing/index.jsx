@@ -5,6 +5,7 @@ import GenericModal from "~/components/Modals/index.jsx";
 import { Link } from "react-router-dom";
 import { RefreshCcw, Plus } from "lucide-react";
 import useAuthStore from "~/modules/auth/stores/authStore.js";
+import { useCallback } from "react";
 
 function GenericListing({
     formKey,
@@ -35,9 +36,9 @@ function GenericListing({
     onPerPageChange,
 }) {
 
-    const handleFormSubmit = (data, { reset }) => {
+    const handleFormSubmit = useCallback((data, { reset }) => {
         onSubmitForm(data, { reset })
-    }
+    }, [onSubmitForm])
 
 
     const { isAdmin } = useAuthStore();

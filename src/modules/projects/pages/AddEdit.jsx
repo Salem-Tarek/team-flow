@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router";
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { projectsFields as fields } from "~/app/constants/fields.js";
 import { useUsers } from "~/modules/users/hooks/index.js";
 import { useTeams } from "~/modules/teams/hooks/index.js";
@@ -42,7 +42,7 @@ function ProjectsAddEdit() {
         }
     }, [mode, projectData]);
 
-    const handleFormSubmit = (data, { reset }) => {
+    const handleFormSubmit = useCallback((data, { reset }) => {
         const teamName = teamsData?.data?.find(team => team.id == data.teamId)?.name;
         const ownerName = usersData?.data?.find(user => user.id == data.ownerId)?.name;
         const options = {
@@ -61,7 +61,7 @@ function ProjectsAddEdit() {
         } else if (mode === 'add') {
             createProject(submitData, options);
         }
-    }
+    }, [addSuccessNotification, addErrorNotification, updateProject, createProject, mode])
 
     return (
         <div>
@@ -71,7 +71,7 @@ function ProjectsAddEdit() {
                     key={params.id || 'add'}
                     fields={projectsFieldsConfig}
                     defaultValues={currentProject}
-                    onSubmit={(data, { reset }) => handleFormSubmit(data, { reset })}
+                    onSubmit={handleFormSubmit}
                     isPending={isLoading || isCreating || isUpdating}
                 />
             </div>

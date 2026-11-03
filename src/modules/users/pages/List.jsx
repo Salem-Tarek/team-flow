@@ -2,12 +2,14 @@ import GenericListing from "~/components/GenericListing";
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from "../hooks/index.js";
 import { usersColumns } from "~/app/constants/columns.js";
 import { usersFields as fields } from "~/app/constants/fields.js";
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useTeams } from "~/modules/teams/hooks/index.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
+
+const EMPTY_ARRAY = [];
 
 function UsersList() {
     const [pagination, setPagination] = useState({})
@@ -51,21 +53,21 @@ function UsersList() {
 
     const modalHeaderText = mode === 'edit' ? 'Edit User' : 'Add User';
 
-    function addBtnClick() {
+    const addBtnClick = useCallback(() => {
         setMode('add')
         setSelectedUser({})
         setFormKey((k) => k + 1);
         showCloseAddEditModal()
-    }
+    }, [])
 
-    function onEditClick(item) {
+    const onEditClick = useCallback((item) => {
         setSelectedUser(item)
         setMode('edit')
         setFormKey((k) => k + 1);
         showCloseAddEditModal()
-    }
+    }, [])
 
-    async function onDeleteClick(item) {
+    const onDeleteClick = useCallback(async (item) => {
         const ok = await confirm({
             modalHeader: 'Delete User',
             confirmBtnText: 'Delete',
@@ -85,9 +87,9 @@ function UsersList() {
                 }
             })
         }
-    }
+    }, [confirm, deleteUser, addSuccessNotification, addErrorNotification])
 
-    function onSubmitForm(data, { reset }) {
+    const onSubmitForm = useCallback((data, { reset }) => {
         const options = {
             onSuccess: (res) => {
                 addSuccessNotification(res.message);
@@ -105,22 +107,22 @@ function UsersList() {
         } else if (mode === 'edit') {
             updateUser({ id: selectedUser?.id, data }, options)
         }
-    }
+    }, [addSuccessNotification, addErrorNotification, createUser, updateUser, selectedUser, mode])
 
-    function handlePageChange(newPage) {
+    const handlePageChange = useCallback((newPage) => {
         setPagination((prev) => ({
             ...prev,
             page: newPage,
         }))
-    }
+    }, [])
 
-    function handlePerPageChange(newLimit) {
+    const handlePerPageChange = useCallback((newLimit) => {
         setPagination((prev) => ({
             ...prev,
             limit: newLimit,
             page: 1,
         }))
-    }
+    }, [])
 
     return (
         <div>
@@ -131,7 +133,7 @@ function UsersList() {
                 modalHeaderText={modalHeaderText}
                 onAddClick={() => addBtnClick()}
                 columns={usersColumns}
-                initialData={usersData?.data || []}
+                initialData={usersData?.data || EMPTY_ARRAY}
                 defaultValues={selectedUser}
                 fields={usersFieldsConfig}
                 showCheckbox={true}

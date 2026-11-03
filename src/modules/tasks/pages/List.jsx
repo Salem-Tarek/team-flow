@@ -3,13 +3,15 @@ import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "../hooks/
 import { tasksColumns } from "~/app/constants/columns.js";
 import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { taskFields as fields } from "~/app/constants/fields.js";
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useSearchParams } from "react-router";
 import { showCloseAddEditModal } from '~/helpers/index.js'
+
+const EMPTY_ARRAY = [];
 
 function TasksList() {
     const [pagination, setPagination] = useState({})
@@ -52,21 +54,21 @@ function TasksList() {
 
     const modalHeaderText = mode === 'edit' ? 'Edit Task' : 'Add Task';
 
-    function addBtnClick() {
+    const addBtnClick = useCallback(() => {
         setMode('add')
         setSelectedTask({})
         setFormKey((k) => k + 1);
         showCloseAddEditModal()
-    }
+    }, [])
 
-    function onEditClick(item) {
+    const onEditClick = useCallback((item) => {
         setSelectedTask(item)
         setMode('edit')
         setFormKey((k) => k + 1);
         showCloseAddEditModal()
-    }
+    }, [])
 
-    async function onDeleteClick(item) {
+    const onDeleteClick = useCallback(async (item) => {
         const ok = await confirm({
             modalHeader: 'Delete Task',
             confirmBtnText: 'Delete',
@@ -86,7 +88,7 @@ function TasksList() {
                 }
             })
         }
-    }
+    }, [confirm, deleteTask, addSuccessNotification, addErrorNotification])
 
     useEffect(() => {
         const isCreateTask = searchParams.get('createtask') === 'true';
@@ -99,7 +101,7 @@ function TasksList() {
         ])
     }, [])
 
-    function onSubmitForm(data, { reset }) {
+    const onSubmitForm = useCallback((data, { reset }) => {
         const options = {
             onSuccess: (res) => {
                 addSuccessNotification(res.message);
@@ -118,22 +120,22 @@ function TasksList() {
         } else if (mode === 'edit') {
             updateTask({ id: selectedTask?.id, data }, options)
         }
-    }
+    }, [addSuccessNotification, addErrorNotification, createTask, updateTask, selectedTask, mode])
 
-    function handlePageChange(newPage) {
+    const handlePageChange = useCallback((newPage) => {
         setPagination((prev) => ({
             ...prev,
             page: newPage,
         }))
-    }
+    }, [])
 
-    function handlePerPageChange(newLimit) {
+    const handlePerPageChange = useCallback((newLimit) => {
         setPagination((prev) => ({
             ...prev,
             limit: newLimit,
             page: 1,
         }))
-    }
+    }, [])
 
     return (
         <div>
@@ -142,24 +144,24 @@ function TasksList() {
                 title="Tasks List"
                 addBtnText="Add Task"
                 modalHeaderText={modalHeaderText}
-                onAddClick={() => addBtnClick()}
+                onAddClick={addBtnClick}
                 columns={tasksColumns}
-                initialData={tasksData?.data || []}
+                initialData={tasksData?.data || EMPTY_ARRAY}
                 defaultValues={selectedTask}
                 fields={tasksFieldsConfig}
                 showCheckbox={true}
                 showActions={true}
-                onEditClick={(item) => onEditClick(item)}
-                onDeleteClick={(item) => onDeleteClick(item)}
-                onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
-                onRefresh={() => refetch()}
+                onEditClick={onEditClick}
+                onDeleteClick={onDeleteClick}
+                onSubmitForm={onSubmitForm}
+                onRefresh={refetch}
                 isLoading={isLoading || isCreating || isUpdating || isDeleting}
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
                 totalItems={pagination.totalItems}
-                onPageChange={(newPage) => handlePageChange(newPage)}
+                onPageChange={handlePageChange}
                 perPage={pagination.limit}
-                onPerPageChange={(newLimit) => handlePerPageChange(newLimit)}
+                onPerPageChange={handlePerPageChange}
             >
             </GenericListing>
         </div>

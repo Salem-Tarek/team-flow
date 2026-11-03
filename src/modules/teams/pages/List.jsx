@@ -2,12 +2,14 @@ import GenericListing from "~/components/GenericListing";
 import { useTeams, useCreateTeam, useUpdateTeam, useDeleteTeam } from "../hooks/index.js";
 import { teamsColumns } from "~/app/constants/columns.js";
 import { teamsFields as fields } from "~/app/constants/fields.js";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useUsers } from "~/modules/users/hooks/index.js";
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { showCloseAddEditModal } from '~/helpers/index.js'
+
+const EMPTY_ARRAY = [];
 
 function TeamsList() {
     const [pagination, setPagination] = useState({})
@@ -52,21 +54,21 @@ function TeamsList() {
 
     const modalHeaderText = mode === 'edit' ? 'Edit Team' : 'Add Team';
 
-    function addBtnClick() {
+    const addBtnClick = useCallback(() => {
         setMode('add')
         setSelectedTeam({})
         setFormKey((k) => k + 1);
         showCloseAddEditModal()
-    }
+    }, [])
 
-    function onEditClick(item) {
+    const onEditClick = useCallback((item) => {
         setSelectedTeam(item)
         setMode('edit')
         setFormKey((k) => k + 1);
         showCloseAddEditModal()
-    }
+    }, [])
 
-    async function onDeleteClick(item) {
+    const onDeleteClick = useCallback(async (item) => {
         const ok = await confirm({
             modalHeader: 'Delete Team',
             confirmBtnText: 'Delete',
@@ -86,9 +88,9 @@ function TeamsList() {
                 }
             })
         }
-    }
+    }, [confirm, deleteTeam, addSuccessNotification, addErrorNotification])
 
-    function onSubmitForm(data, { reset }) {
+    const onSubmitForm = useCallback((data, { reset }) => {
         const options = {
             onSuccess: (res) => {
                 addSuccessNotification(res.message);
@@ -106,22 +108,22 @@ function TeamsList() {
         } else if (mode === 'edit') {
             updateTeam({ id: selectedTeam?.id, data }, options)
         }
-    }
+    }, [addSuccessNotification, addErrorNotification, createTeam, updateTeam, selectedTeam, mode])
 
-    function handlePageChange(newPage) {
+    const handlePageChange = useCallback((newPage) => {
         setPagination((prev) => ({
             ...prev,
             page: newPage,
         }))
-    }
+    }, [])
 
-    function handlePerPageChange(newLimit) {
+    const handlePerPageChange = useCallback((newLimit) => {
         setPagination((prev) => ({
             ...prev,
             limit: newLimit,
             page: 1,
         }))
-    }
+    }, [])
 
     return (
         <div>
@@ -130,24 +132,24 @@ function TeamsList() {
                 title="Teams List"
                 addBtnText="Add Team"
                 modalHeaderText={modalHeaderText}
-                onAddClick={() => addBtnClick()}
+                onAddClick={addBtnClick}
                 columns={teamsColumns}
-                initialData={teamsData?.data || []}
+                initialData={teamsData?.data || EMPTY_ARRAY}
                 defaultValues={selectedTeam}
                 fields={teamsFieldsConfig}
                 showCheckbox={true}
                 showActions={true}
-                onEditClick={(item) => onEditClick(item)}
-                onDeleteClick={(item) => onDeleteClick(item)}
-                onSubmitForm={(data, { reset }) => onSubmitForm(data, { reset })}
-                onRefresh={() => refetch()}
+                onEditClick={onEditClick}
+                onDeleteClick={onDeleteClick}
+                onSubmitForm={onSubmitForm}
+                onRefresh={refetch}
                 isLoading={isLoading || isCreating || isUpdating || isDeleting}
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
                 totalItems={pagination.totalItems}
-                onPageChange={(newPage) => handlePageChange(newPage)}
+                onPageChange={handlePageChange}
                 perPage={pagination.limit}
-                onPerPageChange={(newLimit) => handlePerPageChange(newLimit)}
+                onPerPageChange={handlePerPageChange}
             >
             </GenericListing>
         </div>
