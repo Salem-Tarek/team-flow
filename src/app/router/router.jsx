@@ -1,21 +1,23 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from 'react'
 
 import AuthLayout from "~/layouts/AuthLayout";
 import DashboardLayout from "~/layouts/DashboardLayout";
-import Login from '~/modules/auth/pages/Login'
-import Overview from '~/modules/dashboard/pages/Overview'
-import Components from '~/modules/dashboard/pages/Components'
-import Test from '~/modules/dashboard/pages/Test'
-import NotFound from "~/components/NotFound";
+
+const Login = lazy(() => import('~/modules/auth/pages/Login'));
+const Overview = lazy(() => import('~/modules/dashboard/pages/Overview'));
+const Components = lazy(() => import('~/modules/dashboard/pages/Components'));
+const Test = lazy(() => import('~/modules/dashboard/pages/Test'));
+const NotFound = lazy(() => import("~/components/NotFound"));
 
 // Modules
-import UsersList from "~/modules/users/pages/List.jsx"
-import TeamsList from "~/modules/teams/pages/List.jsx"
-import ProjectsList from "~/modules/projects/pages/List.jsx"
-import ProjectsAddEdit from "~/modules/projects/pages/AddEdit.jsx"
-import ProjectDetails from "~/modules/projects/pages/Details.jsx"
-import TasksList from "~/modules/tasks/pages/List.jsx"
-import Profile from "~/modules/profile/pages/Profile.jsx"
+const UsersList = lazy(() => import("~/modules/users/pages/List.jsx"));
+const TeamsList = lazy(() => import("~/modules/teams/pages/List.jsx"));
+const ProjectsList = lazy(() => import("~/modules/projects/pages/List.jsx"));
+const ProjectsAddEdit = lazy(() => import("~/modules/projects/pages/AddEdit.jsx"));
+const ProjectDetails = lazy(() => import("~/modules/projects/pages/Details.jsx"));
+const TasksList = lazy(() => import("~/modules/tasks/pages/List.jsx"));
+const Profile = lazy(() => import("~/modules/profile/pages/Profile.jsx"));
 
 // Guards
 import AuthGuard from "~/components/layout/guards/AuthGuard.jsx"
@@ -25,33 +27,35 @@ import AdminGuard from "~/components/layout/guards/AdminGuard.jsx"
 export default function AppRoutes() {
     return (
         <>
-            <Routes>
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route element={<GuestGuard />}>
-                    <Route path="/auth" element={<AuthLayout />}>
-                        <Route path="login" element={<Login />} />
-                    </Route>
-                </Route>
-
-                <Route element={<AuthGuard />}>
-                    <Route path="/dashboard" element={<DashboardLayout />}>
-                        <Route index element={<Overview />} />
-                        <Route path="components" element={<Components />} />
-                        <Route path="test" element={<Test />} />
-                        <Route path="users" element={<UsersList />} />
-                        <Route path="teams" element={<TeamsList />} />
-                        <Route path="projects" element={<ProjectsList />} />
-                        <Route element={<AdminGuard />}>
-                            <Route path="projects/:id" element={<ProjectDetails />} />
-                            <Route path="projects/add" element={<ProjectsAddEdit />} />
-                            <Route path="projects/edit/:id" element={<ProjectsAddEdit />} />
+            <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+                <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route element={<GuestGuard />}>
+                        <Route path="/auth" element={<AuthLayout />}>
+                            <Route path="login" element={<Login />} />
                         </Route>
-                        <Route path="tasks" element={<TasksList />} />
-                        <Route path="profile" element={<Profile />} />
                     </Route>
-                </Route>
-                <Route path="*" element={<NotFound />} />
-            </Routes>
+
+                    <Route element={<AuthGuard />}>
+                        <Route path="/dashboard" element={<DashboardLayout />}>
+                            <Route index element={<Overview />} />
+                            <Route path="components" element={<Components />} />
+                            <Route path="test" element={<Test />} />
+                            <Route path="users" element={<UsersList />} />
+                            <Route path="teams" element={<TeamsList />} />
+                            <Route path="projects" element={<ProjectsList />} />
+                            <Route element={<AdminGuard />}>
+                                <Route path="projects/:id" element={<ProjectDetails />} />
+                                <Route path="projects/add" element={<ProjectsAddEdit />} />
+                                <Route path="projects/edit/:id" element={<ProjectsAddEdit />} />
+                            </Route>
+                            <Route path="tasks" element={<TasksList />} />
+                            <Route path="profile" element={<Profile />} />
+                        </Route>
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Suspense>
         </>
     )
 }
