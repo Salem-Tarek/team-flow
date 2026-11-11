@@ -1,6 +1,6 @@
 import GenericListing from "~/components/GenericListing";
 import { useProjects, useDeleteProject } from "../hooks/index.js";
-import { projectsColumns } from "~/app/constants/columns.js";
+import { projectsColumns } from "~/app/constants/columns.tsx";
 import { useNavigate } from "react-router";
 import { useState, useEffect } from 'react';
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";

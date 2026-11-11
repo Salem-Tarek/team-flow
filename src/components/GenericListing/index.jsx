@@ -1,5 +1,5 @@
 import GenericBtn from "~/components/GenericBtn/index.jsx";
-import GenericTable from "~/components/GenericTable/index.jsx";
+import GenericTable from "~/components/GenericTable/index.tsx";
 import GenericForm from "~/components/form/GenericForm.jsx";
 import GenericModal from "~/components/Modals/index.jsx";
 import { Link } from "react-router-dom";

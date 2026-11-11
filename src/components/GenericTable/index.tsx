@@ -1,9 +1,29 @@
 import { useState, useEffect, useRef } from "react"
 import { FormSelect } from "~/components/form/index.js"
-import parse from 'html-react-parser';
+// import parse from 'html-react-parser';
 import { Trash, Pencil, Eye, Ban } from "lucide-react"
+// import type { ReactNode } from 'react'
+import type { Column, TableRowBasics } from '~/app/constants/types.ts'
 
-function GenericTable({
+type GenericTableProps<T extends TableRowBasics> = {
+  columns: Column<T>[],
+  initialData: T[],
+  showCheckbox?: boolean,
+  showActions?: boolean,
+  onEditClick?: (value: T) => void,
+  onDeleteClick?: (value: T) => void,
+  onViewClick?: (value: T) => void,
+  isLoading?: boolean,
+  isAdmin?: boolean,
+  currentPage: number,
+  totalPages: number,
+  totalItems: number,
+  onPageChange?: (value: number) => void,
+  perPage: number,
+  onPerPageChange?: (value: number) => void,
+}
+
+function GenericTable<T extends TableRowBasics>({
   columns = [],
   initialData = [],
   showCheckbox = true,
@@ -19,21 +39,21 @@ function GenericTable({
   onPageChange,
   perPage = 10,
   onPerPageChange,
-}) {
-  const [data, setData] = useState(initialData)
+}: GenericTableProps<T>) {
+  const [data, setData] = useState<T[]>(initialData)
 
   const hasVisibleActions = showActions && columns.some((column) => {
     if (column.key !== "actions" || !column.actions?.length) return false
 
-    return column.actions.some((action) => {
+    return column.actions.some((action: string) => {
       if (action === "view") return true
       if (isAdmin && ["edit", "delete"].includes(action)) return true
 
-      return false
+      // return false
     })
   })
 
-  const updatePage = (newPage) => {
+  const updatePage = (newPage: number) => {
     onPageChange?.(newPage)
   }
 
@@ -45,13 +65,13 @@ function GenericTable({
     data?.some((item) => item.checked) &&
     data?.some((item) => !item.checked)
 
-  const checkAllCheckbox = useRef(null)
+  const checkAllCheckbox = useRef<HTMLInputElement>(null)
 
-  function handleCheckAll(isChecked) {
+  function handleCheckAll(isChecked: boolean) {
     toggleCheckAll(isChecked)
   }
 
-  function toggleCheckAll(isChecked) {
+  function toggleCheckAll(isChecked: boolean) {
     const updatedData = data.map((item) => ({
       ...item,
       checked: isChecked,
@@ -60,7 +80,7 @@ function GenericTable({
     setData(updatedData)
   }
 
-  function handleCheck(id) {
+  function handleCheck(id: T['id']) {
     const updatedData = data.map((item) => {
       if (item.id === id) {
         return { ...item, checked: !item.checked }
@@ -100,7 +120,7 @@ function GenericTable({
                     <input
                       ref={checkAllCheckbox}
                       checked={checkAll}
-                      onChange={(e) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         handleCheckAll(e.target.checked)
                       }
                       type="checkbox"
@@ -124,7 +144,7 @@ function GenericTable({
                 </th>
               ))}
 
-              {hasVisibleActions && <th></th>}
+              {/* {hasVisibleActions && <th></th>} */}
             </tr>
           </thead>
 
@@ -191,7 +211,7 @@ function GenericTable({
                     if (column.key !== "actions") {
                       return (
                         <td key={`row_${column.key}`}>
-                          {column.htmlStrcuture ? <>{parse(column.htmlStrcuture({ value: item[column.key], label: column.label }))}</> : item[column.key]}
+                          {column.htmlStrcuture ? column.htmlStrcuture({ value: item[column.key], label: column.label }) : item[column.key]}
                         </td>
                       )
                     }
@@ -262,7 +282,7 @@ function GenericTable({
           Showing {showedItemsCount} of {totalItems}
         </p>
         <div className="flex gap-2 items-center max-tablet:self-end">
-          <FormSelect value={perPage} onChange={(e) => onPerPageChange?.(Number(e.target.value))} options={[
+          <FormSelect value={perPage} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onPerPageChange?.(Number(e.target.value))} options={[
             { value: 10, label: "10" },
             { value: 25, label: "25" },
             { value: 50, label: "50" },

@@ -1,6 +1,6 @@
 import GenericListing from "~/components/GenericListing";
 import { useTeams, useCreateTeam, useUpdateTeam, useDeleteTeam } from "../hooks/index.js";
-import { teamsColumns } from "~/app/constants/columns.js";
+import { teamsColumns } from "~/app/constants/columns.tsx";
 import { teamsFields as fields } from "~/app/constants/fields.js";
 import { useState, useMemo, useEffect } from "react";
 import { useUsers } from "~/modules/users/hooks/index.js";

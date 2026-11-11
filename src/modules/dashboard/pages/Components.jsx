@@ -1,4 +1,4 @@
-import GenericTable from '~/components/GenericTable/index.jsx'
+import GenericTable from '~/components/GenericTable/index.tsx'
 import GenericListing from '~/components/GenericListing/index.jsx'
 import GenericBtn from '~/components/GenericBtn/index.jsx'
 import GenericModal from '~/components/Modals/index.jsx'

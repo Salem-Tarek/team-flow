@@ -1,6 +1,6 @@
 import GenericListing from "~/components/GenericListing";
 import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "../hooks/index.js";
-import { tasksColumns } from "~/app/constants/columns.js";
+import { tasksColumns } from "~/app/constants/columns.tsx";
 import { useUsers } from "~/modules/users/hooks";
 import { useProjects } from "~/modules/projects/hooks";
 import { useMemo, useState, useEffect } from "react";
