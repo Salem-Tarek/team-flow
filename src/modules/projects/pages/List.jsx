@@ -1,4 +1,4 @@
-import GenericListing from "~/components/GenericListing";
+import GenericListing from "~/components/GenericListing/index.tsx";
 import { useProjects, useDeleteProject } from "../hooks/index.js";
 import { projectsColumns } from "~/app/constants/columns.tsx";
 import { useNavigate } from "react-router";

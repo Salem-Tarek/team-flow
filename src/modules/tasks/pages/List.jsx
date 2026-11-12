@@ -1,4 +1,4 @@
-import GenericListing from "~/components/GenericListing";
+import GenericListing from "~/components/GenericListing/index.tsx";
 import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "../hooks/index.js";
 import { tasksColumns } from "~/app/constants/columns.tsx";
 import { useUsers } from "~/modules/users/hooks";

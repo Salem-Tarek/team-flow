@@ -1,4 +1,4 @@
-import GenericListing from "~/components/GenericListing";
+import GenericListing from "~/components/GenericListing/index.tsx";
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from "../hooks/index.js";
 import { usersColumns } from "~/app/constants/columns.tsx";
 import { usersFields as fields } from "~/app/constants/fields.js";

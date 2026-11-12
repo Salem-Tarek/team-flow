@@ -5,8 +5,40 @@ import GenericModal from "~/components/Modals/index.jsx";
 import { Link } from "react-router-dom";
 import { RefreshCcw, Plus } from "lucide-react";
 import useAuthStore from "~/modules/auth/stores/authStore.js";
+import type { Column, TableRowBasics } from '~/app/constants/types.ts'
+import type { ReactNode } from 'react'
 
-function GenericListing({
+type GenericListingProps<T extends TableRowBasics> = {
+    columns: Column<T>[],
+    children?: ReactNode,
+    initialData: T[],
+    fields?: any[],
+    defaultValues?: Record<string, any>,
+    showCheckbox?: boolean,
+    showActions?: boolean,
+    onAddClick?: () => void,
+    onRefresh?: () => void,
+    onEditClick?: (value: T) => void,
+    onDeleteClick?: (value: T) => void,
+    onViewClick?: (value: T) => void,
+    isLoading?: boolean,
+    showAddNew?: boolean,
+    currentPage?: number,
+    totalPages?: number,
+    totalItems?: number,
+    onPageChange?: (value: number) => void,
+    perPage?: number,
+    onPerPageChange?: (value: number) => void,
+    // TODO: Define the correct signature after converting GenericForm.
+    onSubmitForm?: (...args: any[]) => void;
+    formKey?: number,
+    title: string,
+    addBtnText?: string,
+    modalHeaderText?: string,
+    addBtnLink?: string,
+}
+
+function GenericListing<T extends TableRowBasics>({
     formKey,
     children,
     title,
@@ -33,10 +65,10 @@ function GenericListing({
     onPageChange,
     perPage = 10,
     onPerPageChange,
-}) {
+}: GenericListingProps<T>) {
 
-    const handleFormSubmit = (data, { reset }) => {
-        onSubmitForm(data, { reset })
+    const handleFormSubmit = (data: any, { reset }: { reset: () => void }) => {
+        onSubmitForm?.(data, { reset })
     }
 
 
