@@ -5,7 +5,7 @@ import miniLightLogo from '@/assets/images/mini-light-logo.png'
 import darkLogo from '@/assets/images/dark-logo.png'
 import miniDarkLogo from '@/assets/images/mini-dark-logo.png'
 import { NavLink } from "react-router-dom";
-import GenericBtn from "~/components/GenericBtn/index.jsx";
+import GenericBtn from "~/components/GenericBtn/index.tsx";
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";

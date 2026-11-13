@@ -1,4 +1,4 @@
-import GenericBtn from "~/components/GenericBtn/index.jsx";
+import GenericBtn from "~/components/GenericBtn/index.tsx";
 import GenericTable from "~/components/GenericTable/index.tsx";
 import GenericForm from "~/components/form/GenericForm.jsx";
 import GenericModal from "~/components/Modals/index.jsx";

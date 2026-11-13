@@ -1,4 +1,4 @@
-import GenericBtn from "~/components/GenericBtn/index.jsx";
+import GenericBtn from "~/components/GenericBtn/index.tsx";
 import { Calendar, MoveRight } from "lucide-react";
 
 const statusStyles = {

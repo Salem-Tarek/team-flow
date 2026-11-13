@@ -1,5 +1,5 @@
 import GenericModal from './index.jsx'
-import GenericBtn from '~/components/GenericBtn/index.jsx'
+import GenericBtn from '~/components/GenericBtn/index.tsx'
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 
 function ConfirmModal() {

@@ -3,7 +3,7 @@ import GenericForm from "~/components/form/GenericForm.jsx";
 import GenericModal from "~/components/Modals/index.jsx";
 import useAuthStore from "~/modules/auth/stores/authStore.js";
 import { profileFields } from "~/app/constants/fields.js";
-import GenericBtn from "~/components/GenericBtn/index.jsx";
+import GenericBtn from "~/components/GenericBtn/index.tsx";
 import { useUpdateCurrentUser } from "~/modules/auth/hooks/useAuth.js";
 import useNotificationsStore from "~/stores/notificationsStore.js";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";

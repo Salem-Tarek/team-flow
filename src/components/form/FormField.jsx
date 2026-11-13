@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import GenericBtn from "~/components/GenericBtn/index.jsx"
+import GenericBtn from "~/components/GenericBtn/index.tsx"
 
 function FormField({ label, error, className = "", type = "text", ref, showPasswordIcon = true, ...rest }) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);

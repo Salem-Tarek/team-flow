@@ -1,5 +1,5 @@
 
-import GenericBtn from "~/components/GenericBtn/index.jsx";
+import GenericBtn from "~/components/GenericBtn/index.tsx";
 import { useBreadcrumbStore } from "~/stores/breadcrumbStore.js";
 import { useEffect } from 'react'
 import TaskStatusChart from '../components/TaskStatusChart.jsx'
