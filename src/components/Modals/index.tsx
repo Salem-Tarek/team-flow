@@ -1,5 +1,14 @@
+import type { ReactNode } from 'react';
 
-function GenericModal({ modalHeader = 'Modal Header', footer, children, modalId = "defaultModal" }) {
+type GenericModalProps = {
+    modalHeader: string,
+    footer?: ReactNode,
+    children?: ReactNode,
+    modalId?: string
+}
+
+
+function GenericModal({ modalHeader = 'Modal Header', footer, children, modalId = "defaultModal" }: GenericModalProps) {
 
     return (
         <>

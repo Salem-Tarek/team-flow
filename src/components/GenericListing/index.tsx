@@ -1,7 +1,7 @@
 import GenericBtn from "~/components/GenericBtn/index.tsx";
 import GenericTable from "~/components/GenericTable/index.tsx";
 import GenericForm from "~/components/form/GenericForm.jsx";
-import GenericModal from "~/components/Modals/index.jsx";
+import GenericModal from "~/components/Modals/index.tsx";
 import { Link } from "react-router-dom";
 import { RefreshCcw, Plus } from "lucide-react";
 import useAuthStore from "~/modules/auth/stores/authStore.js";

@@ -1,4 +1,4 @@
-import GenericModal from './index.jsx'
+import GenericModal from './index.tsx'
 import GenericBtn from '~/components/GenericBtn/index.tsx'
 import { useConfirmContext } from "~/app/providers/ConfirmationProvider.jsx";
 

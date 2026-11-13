@@ -1,7 +1,7 @@
 import GenericTable from '~/components/GenericTable/index.tsx'
 import GenericListing from '~/components/GenericListing/index.tsx'
 import GenericBtn from '~/components/GenericBtn/index.tsx'
-import GenericModal from '~/components/Modals/index.jsx'
+import GenericModal from '~/components/Modals/index.tsx'
 // import FormField from '~/components/form/FormField.jsx'
 
 function Components() {

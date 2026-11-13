@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import GenericForm from "~/components/form/GenericForm.jsx";
-import GenericModal from "~/components/Modals/index.jsx";
+import GenericModal from "~/components/Modals/index.tsx";
 import useAuthStore from "~/modules/auth/stores/authStore.js";
 import { profileFields } from "~/app/constants/fields.js";
 import GenericBtn from "~/components/GenericBtn/index.tsx";
